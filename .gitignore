@@ -1,4 +1,5 @@
 *.sif
+*.def
 
 *.csv
 *.parquet
