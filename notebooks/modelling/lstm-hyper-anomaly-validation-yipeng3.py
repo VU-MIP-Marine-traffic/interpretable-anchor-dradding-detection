@@ -44,6 +44,11 @@ from src.yipeng3._helper_lstm_ae_functions import (
     lstm_ae_hp,
 )
 
+import os
+
+os.makedirs('../images', exist_ok=True)
+os.makedirs('../../output', exist_ok=True)
+os.makedirs('../../output/metrics', exist_ok=True)
 
 # Load Yipeng 3 prediction data.
 yipeng3_x = np.load(
@@ -333,35 +338,35 @@ print(df_loss_high)
 
 # Save all CSV results under ../../output/.
 df_picp.to_csv(
-    '../../output/data_yipeng3/lstm-ae/picp-lstm.csv'
+    '../../output/metrics/picp-lstm.csv'
 )
 
 df_pinaw.to_csv(
-    '../../output/data_yipeng3/lstm-ae/pinaw-lstm.csv'
+    '../../output/metrics/pinaw-lstm.csv'
 )
 
 df_picp.to_csv(
-    '../../output/df_picp_lstm_yipeng.csv'
+    '../../output/metrics/df_picp_lstm_yipeng.csv'
 )
 
 df_pinaw.to_csv(
-    '../../output/df_pinaw_lstm_yipeng.csv'
+    '../../output/metrics/df_pinaw_lstm_yipeng.csv'
 )
 
 df_picp.to_csv(
-    '../../output/data_eagles_vezhen/lstm-ae/picp-lstm.csv'
+    '../../output/metrics/picp-lstm.csv'
 )
 
 df_pinaw.to_csv(
-    '../../output/data_eagles_vezhen/lstm-ae/pinaw-lstm.csv'
+    '../../output/metrics/pinaw-lstm.csv'
 )
 
 df_loss_low.to_csv(
-    '../../output/data_eagles_vezhen/lstm-ae/loss_low-lstm.csv'
+    '../../output/metrics/loss_low-lstm.csv'
 )
 
 df_loss_high.to_csv(
-    '../../output/data_eagles_vezhen/lstm-ae/loss_high-lstm.csv'
+    '../../output/metrics/loss_high-lstm.csv'
 )
 
 

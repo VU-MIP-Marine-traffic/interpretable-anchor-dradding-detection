@@ -1,3 +1,6 @@
+# To run: python -m src.yipeng3.data_collection with either environment.
+# No external dependencies, no AI used in writing this script
+
 import requests
 import gc
 import zipfile
@@ -26,7 +29,7 @@ COLUMNS = [
 ]
 
 dates = pd.date_range(
-    start=date(2025, 2, 27),
+    start=date(2024, 11, 1),
     end=date(2025, 3, 1)
 )
 

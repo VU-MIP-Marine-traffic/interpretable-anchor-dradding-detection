@@ -1,9 +1,17 @@
+"""
+Requires (ChatGPT 5.6 helped identify this):
+- output/data_yipeng3/qrf/X_train.npy
+- output/data_yipeng3/qrf/y_train.npy
+- output/data_yipeng3/qrf/X_val.npy
+- output/data_yipeng3/qrf/y_val.npy
+"""
+
+import os
 import pickle
 import numpy as np
 from itertools import product
 
 import xgboost as xgb
-from sklearn.model_selection import KFold
 from sklearn.metrics import mean_pinball_loss #quantile loss
 
 X_train = np.load('output/data_yipeng3/qrf/X_train.npy')
@@ -43,9 +51,6 @@ for hyp_ix, hyperparam_collection in enumerate( list(product( *param_grid.values
         max_depth,
         eta,
         subsample,
-        # colsample_bytree,
-        # gamma,
-        # min_child_weight
     ) = hyperparam_collection
 
     print(f'Hyperparameter {hyp_ix+1}/{hyperparam_count}')
@@ -55,9 +60,6 @@ for hyp_ix, hyperparam_collection in enumerate( list(product( *param_grid.values
         max_depth=max_depth,
         eta=eta,
         subsample=subsample,
-        # colsample_bytree=colsample_bytree,
-        # gamma=gamma,
-        # min_child_weight=min_child_weight,
         objective="reg:quantileerror",
         quantile_alpha=0.025,
         device='gpu'
@@ -73,6 +75,7 @@ for hyp_ix, hyperparam_collection in enumerate( list(product( *param_grid.values
 
     print(grid_search_res[hyperparam_collection])
 
+os.makedirs('output/models/xgboost/', exists_ok=True)
 with open('output/models/xgboost/hyperparam-first-cog-yipeng3.pkl', 'wb+') as f:
     pickle.dump(grid_search_res, f)
 
@@ -89,9 +92,6 @@ for hyp_ix, hyperparam_collection in enumerate( list(product( *param_grid.values
         max_depth,
         eta,
         subsample,
-        # colsample_bytree,
-        # gamma,
-        # min_child_weight
     ) = hyperparam_collection
 
     print(f'Hyperparameter {hyp_ix+1}/{hyperparam_count}')
@@ -101,9 +101,6 @@ for hyp_ix, hyperparam_collection in enumerate( list(product( *param_grid.values
         max_depth=max_depth,
         eta=eta,
         subsample=subsample,
-        # colsample_bytree=colsample_bytree,
-        # gamma=gamma,
-        # min_child_weight=min_child_weight,
         objective="reg:quantileerror",
         quantile_alpha=0.025,
         device='gpu'
@@ -135,9 +132,6 @@ for hyp_ix, hyperparam_collection in enumerate( list(product( *param_grid.values
         max_depth,
         eta,
         subsample,
-        # colsample_bytree,
-        # gamma,
-        # min_child_weight
     ) = hyperparam_collection
 
     print(f'Hyperparameter {hyp_ix+1}/{hyperparam_count}')
@@ -147,9 +141,6 @@ for hyp_ix, hyperparam_collection in enumerate( list(product( *param_grid.values
         max_depth=max_depth,
         eta=eta,
         subsample=subsample,
-        # colsample_bytree=colsample_bytree,
-        # gamma=gamma,
-        # min_child_weight=min_child_weight,
         objective="reg:quantileerror",
         quantile_alpha=0.025,
         device='gpu'

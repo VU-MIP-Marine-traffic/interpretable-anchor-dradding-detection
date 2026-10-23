@@ -1,4 +1,5 @@
 import pickle
+import os
 import numpy as np
 import quantile_forest as qrf
 from sklearn.metrics import mean_pinball_loss
@@ -25,7 +26,6 @@ y_train_val = y_train_val.reshape((y_train_val.shape[0], y_train_val.shape[1]*y_
 del X_train, y_train, X_val, y_val
 
 tree_counts_losses = {
-    # 250: [],
     200: [],
     150: [],
     100: [],
@@ -48,6 +48,7 @@ for tree_count in tree_counts_losses.keys():
             n_jobs=-1,
             verbose=True,
             n_estimators=tree_count,
+            random_state=0
         )
         qrf_model.fit(X_train, y_train)
 
@@ -71,5 +72,6 @@ for tree_count in tree_counts_losses.keys():
 
     tree_counts_losses[tree_count] = losses
 
-with open('qrf-tree-count-losses.pkl', 'wb+') as f:
+os.makedirs('output/models/qrf-yipeng3/', exist_ok=True)
+with open('output/models/qrf-yipeng3/qrf-tree-count-losses.pkl', 'wb+') as f:
     pickle.dump(tree_counts_losses, f)

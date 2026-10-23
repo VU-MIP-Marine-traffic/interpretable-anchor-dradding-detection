@@ -1,4 +1,9 @@
-""" Meteorological data acquisition for Yi-Peng 3 data and AIS data around it """
+""" 
+Meteorological data acquisition for Yi-Peng 3 data and AIS data around it.
+
+Depends on .env file that looks like this:
+API_KEY="<api-key>"
+"""
 
 import requests
 import pandas as pd
@@ -206,4 +211,6 @@ def construct_coordinate_grid(step=0.5) -> list:
 if __name__ == "__main__":
 
     lat_lon_grid = construct_coordinate_grid(step=0.5)
+
+    os.makedirs('data/', exist_ok=True)
     get_weather_df(dates, lat_lon_grid, 'data/weather_df_yipeng3_v2.csv')

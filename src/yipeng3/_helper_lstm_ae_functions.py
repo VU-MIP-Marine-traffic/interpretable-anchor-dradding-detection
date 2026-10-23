@@ -1,7 +1,5 @@
 import tensorflow as tf
-from tensorflow.keras import layers, Model
-from keras.callbacks import EarlyStopping
-import numpy as np
+from tensorflow.keras import layers
 
 def quantile_loss(tau: float):
 
@@ -97,33 +95,3 @@ def lstm_ae_hp(
 
     model.compile(optimizer='adam', loss=loss_func(tau))
     return model
-
-
-def test_model(
-    test_dataset,
-    model_low,
-    model_high
-):
-
-    y_true = []
-    y_pred_high = []
-    y_pred_low = []
-
-    for X_batch, y_batch in test_dataset.as_numpy_iterator():
-        y_true.append(y_batch)
-
-        y_pred_low.append(
-            model_low.predict(X_batch, verbose=0))
-        y_pred_high.append(
-            model_high.predict(X_batch, verbose=0))
-
-    y_true = np.concatenate( y_true ).ravel()
-
-    y_pred_high = np.concatenate( y_pred_high ).ravel()
-    y_pred_low = np.concatenate( y_pred_low ).ravel()
-
-    return {
-        'picp': np.mean( (y_pred_low <= y_true) & (y_pred_high >= y_true) ),
-        'pinaw': np.mean( np.abs(y_pred_high - y_pred_low) ) / 2
-    }
-

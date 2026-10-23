@@ -1,9 +1,11 @@
-import matplotlib.pyplot as plt
+# prepares Yi-Peng 3 data
+# Depends on (obtaining the list was assisted by ChatGPT 5.6)
+# - "data/414270000_20241118_sample(in).csv", - need to get it for some price from MarrineTraffic
+# - "data/weather_df_yipeng3_v2.csv", - fetched from src/yipeng3/meteorological_data_collection.py
+
 import pandas as pd
 
 raw_df = pd.read_csv('data/414270000_20241118_sample(in).csv')
-
-from datetime import timedelta, date
 
 from itertools import product
 import pandas as pd
@@ -120,8 +122,6 @@ for mmsi, mmsi_df in grouped_df:
 df = pd.concat( dfs, ignore_index=True )
 
 min_max_scale_cols = [
-    # 'LATITUDE',
-    # 'LONGITUDE',
     'speed',
     'currentSpeed',
     'gust',
@@ -179,6 +179,9 @@ for mmsi, mmsi_df in df.groupby('MMSI'):
     data[mmsi] = (X_arr, y_arr)
 
 vezhen_x, vezhen_y = data[414270000]
+
+import os
+os.makedirs(f'output/data_yipeng3/{MODE}', exist_ok=True)
 
 vezhen_x.dump(f'output/data_yipeng3/{MODE}/yipeng3_x.npy')
 vezhen_y.dump(f'output/data_yipeng3/{MODE}/yipeng3_y.npy')

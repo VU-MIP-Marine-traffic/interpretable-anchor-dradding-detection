@@ -1,3 +1,13 @@
+# Depends on (provided with help of Chat GPT5.6):
+# output/data_yipeng3/lstm-ae/X_train.npy
+# output/data_yipeng3/lstm-ae/y_train.npy
+# output/data_yipeng3/lstm-ae/X_test.npy
+# output/data_yipeng3/lstm-ae/y_test.npy
+# output/data_yipeng3/lstm-ae/X_val.npy
+# output/data_yipeng3/lstm-ae/y_val.npy
+#
+# All of these are provided by src/yipeng3/data_preparation_normal.py
+
 from src.yipeng3._helper_lstm_ae_functions import lstm_ae
 from keras.callbacks import EarlyStopping
 from sklearn.model_selection import KFold, train_test_split
@@ -137,8 +147,10 @@ for ix, (train_idx, test_idx) in enumerate( folds.split(X,y) ):
 
     print(df_loss_low)
 
-df_picp.to_csv('picp-lstm-yp3.csv')
-df_pinaw.to_csv('pinaw-lstm-yp3.csv')
-df_loss_low.to_csv('loss_low-lstm-yp3.csv')
-df_loss_high.to_csv('loss_high-lstm-yp3.csv')
+import os 
+os.makedirs('output/metrics/', exist_ok=True)
 
+df_picp.to_csv('output/metrics/picp-lstm-yp3.csv')
+df_pinaw.to_csv('output/metrics/pinaw-lstm-yp3.csv')
+df_loss_low.to_csv('output/metrics/loss_low-lstm-yp3.csv')
+df_loss_high.to_csv('output/metrics/loss_high-lstm-yp3.csv')

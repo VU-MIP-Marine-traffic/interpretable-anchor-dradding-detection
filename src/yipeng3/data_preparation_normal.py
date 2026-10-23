@@ -1,3 +1,7 @@
+# External dependencies (With the help of ChatGPT 5.6)
+# - "data/weather_df_yipeng3_v2.csv", - obtained from src/yipeng3/meteorological_data_collection.py
+# - "data/ais/aisdk-YYYY-MM-DD/*.csv", - obtained from src/yipeng3/data_collection.py
+
 import os
 import sys
 import pickle

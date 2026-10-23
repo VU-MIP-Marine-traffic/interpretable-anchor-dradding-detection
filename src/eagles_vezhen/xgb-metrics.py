@@ -1,3 +1,4 @@
+import os
 import xgboost as xgb
 from sklearn.model_selection import KFold
 from sklearn.metrics import mean_pinball_loss
@@ -147,8 +148,9 @@ for ix, (train_idx, test_idx) in enumerate( folds.split(X,y) ):
 
     print(df_loss_low)
 
+os.makedirs('output/metrics/', exists_ok=True)
 
-df_picp.to_csv('picp-xgb-ev.csv')
-df_pinaw.to_csv('pinaw-xgb-ev.csv')
-df_loss_low.to_csv('loss_low-xgb-ev.csv')
-df_loss_high.to_csv('loss_high-xgb-ev.csv')
+df_picp.to_csv('output/metrics/picp-xgb-ev.csv')
+df_pinaw.to_csv('output/metrics/pinaw-xgb-ev.csv')
+df_loss_low.to_csv('output/metrics/loss_low-xgb-ev.csv')
+df_loss_high.to_csv('output/metrics/loss_high-xgb-ev.csv')

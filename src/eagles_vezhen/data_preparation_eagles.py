@@ -300,8 +300,6 @@ if __name__ == "__main__":
     np.save('output/gaps2.npy', np.array(all_time_diffs))
 
     min_max_scale_cols = [
-        # 'LATITUDE',
-        # 'LONGITUDE',
         'SPEED',
         'currentSpeed',
         'gust',

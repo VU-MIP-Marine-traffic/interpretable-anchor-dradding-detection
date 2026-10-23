@@ -1,10 +1,8 @@
-import time
 import pickle
 import numpy as np
 from itertools import product
 
 import quantile_forest as qrf
-from sklearn.model_selection import KFold
 from sklearn.metrics import mean_pinball_loss #quantile loss
 
 X_train = np.load('output/data_yipeng3/qrf/X_train.npy')
@@ -53,7 +51,8 @@ for hyp_ix, hyperparam_collection in enumerate( list(product( *param_grid.values
         max_features=max_features,
         max_depth=max_depth,
         max_samples=max_samples,
-        n_jobs=-1
+        n_jobs=-1,
+        random_state=0
     )
     model.fit(X_train, y_train)
 
@@ -71,5 +70,5 @@ for hyp_ix, hyperparam_collection in enumerate( list(product( *param_grid.values
     else:
         grid_search_res[hyperparam_collection].append( (loss_low, loss_high) )
 
-with open('qrf-hyperparam.pkl', 'wb+') as f:
+with open('output/models/qrf-yipeng3/qrf-hyperparam.pkl', 'wb+') as f:
     pickle.dump(grid_search_res, f)

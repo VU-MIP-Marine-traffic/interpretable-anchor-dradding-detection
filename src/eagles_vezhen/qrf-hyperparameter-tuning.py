@@ -58,7 +58,8 @@ for hyp_ix, hyperparam_collection in enumerate( list(product( *param_grid.values
         max_features=max_features,
         max_depth=max_depth,
         max_samples=max_samples,
-        n_jobs=-1
+        n_jobs=-1,
+        random_state=0
     )
     model.fit(X_train, y_train)
 
@@ -75,5 +76,5 @@ for hyp_ix, hyperparam_collection in enumerate( list(product( *param_grid.values
     else:
         grid_search_res[hyperparam_collection].append( (loss_low, loss_high) )
 
-with open('output/models/qrf/hyperparam-fourth.pkl', 'wb+') as f:
+with open('output/models/qrf/hyperparam-fifth.pkl', 'wb+') as f:
     pickle.dump(grid_search_res, f)

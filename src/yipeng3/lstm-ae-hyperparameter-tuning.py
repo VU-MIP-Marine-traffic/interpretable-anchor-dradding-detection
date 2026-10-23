@@ -4,10 +4,7 @@ from src.yipeng3._helper_lstm_ae_functions import (
     lstm_ae,
     lstm_ae_hp,
 )
-from keras_tuner import (
-    # RandomSearch,
-    GridSearch
-)
+from keras_tuner import GridSearch
 import tensorflow as tf
 import pickle
 from keras.callbacks import EarlyStopping

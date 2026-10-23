@@ -36,8 +36,8 @@ X_test = X_test.reshape((-1, SLIDINGW_STEPS * N_INP_FEATS))
 
 best_params = {
     'n_estimators': 50,
-    'max_depth': 64,
-    'max_samples': 0.5,
+    'max_depth': 32,
+    'max_samples': 1.0,
     'max_features': 'sqrt',
     'max_samples_leaf': 5,
 }

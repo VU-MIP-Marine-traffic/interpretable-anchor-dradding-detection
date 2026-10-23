@@ -7,7 +7,7 @@ import numpy as np
 
 def train_and_eval_qrf(X_train, X_test, y_train, y_test, best_hyper):
 
-    qrf_model = qrf.RandomForestQuantileRegressor(**best_hyper, n_jobs=-1)
+    qrf_model = qrf.RandomForestQuantileRegressor(**best_hyper, n_jobs=-1, random_state=42)
     qrf_model.fit(X_train, y_train)
 
     y_pred = qrf_model.predict(X_test, quantiles=[0.025, 0.975])
@@ -64,10 +64,10 @@ y_test = y_test.reshape((-1, SLIDINGW_STEPS*N_OUT_FEATS))
 X_test = X_test.reshape((-1, SLIDINGW_STEPS*N_INP_FEATS))
 
 best_params = {
-    'n_estimators': 100,
+    'n_estimators': 50,
     'max_depth': 32,
-    'max_samples': 0.75,
-    'max_features': 0.75,
+    'max_samples': 1.0,
+    'max_features': 'sqrt',
     'max_samples_leaf': 5,
 }
 
@@ -107,7 +107,7 @@ for ix, (train_idx, test_idx) in enumerate( folds.split(X,y) ):
 
     print(df_loss_low)
 
-df_picp.to_csv('picp-qrf-ev.csv')
-df_pinaw.to_csv('pinaw-qrf-ev.csv')
-df_loss_low.to_csv('loss_low-qrf-ev.csv')
-df_loss_high.to_csv('loss_high-qrf-ev.csv')
+df_picp.to_csv('output/metrics/picp-qrf-ev.csv')
+df_pinaw.to_csv('output/metrics/pinaw-qrf-ev.csv')
+df_loss_low.to_csv('output/metrics/loss_low-qrf-ev.csv')
+df_loss_high.to_csv('output/metrics/loss_high-qrf-ev.csv')

@@ -15,6 +15,10 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+import os
+
+os.makedirs('../images', exist_ok=True)
+
 df = pd.read_csv('../../data/Vessels_PositionReport_5min_25Dec2024_25Jan2025.csv')
 
 df['DATE TIME (UTC)'] = pd.to_datetime(df['DATE TIME (UTC)'])

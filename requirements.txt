@@ -1,6 +1,0 @@
-quantile-forest==1.4.2
-tqdm==4.68.4
-quantile-forest==1.4.2
-scikit-learn==1.7.2
-numpy==2.4.6
-pandas==2.3.3
