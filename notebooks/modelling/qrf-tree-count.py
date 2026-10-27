@@ -21,5 +21,4 @@ plt.ylabel('Quanile loss (\u03C4=0.025)', size=16)
 plt.xlabel('Number of trees in QRF', size=16)
 plt.title('QRF number of trees vs quantile loss', size=20)
 plt.tight_layout()
-plt.savefig('../images/tree-count-ev.png', dpi=750)
-
+plt.savefig('../images/tree-count-ev.pdf', format='pdf')

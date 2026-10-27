@@ -1,6 +1,6 @@
-# To run this (if you are in directory root): 
+# To run this (if you are in directory root):
 #   source venv/bin/activate
-#   cd notebooks/eda/ 
+#   cd notebooks/eda/
 #   python anomalies-eagle-s-vezhen-20260617.py
 # If run fails check: 1) if you are in root of the repository, 2) if you followed instructions in README.md to setup the venv
 
@@ -48,9 +48,9 @@ all_vessel_near_yipeng = pd.read_parquet('../../data/prepared/baseline/dataset_r
 
 
 # EAGLE S: take over on 16:40
-# 
+#
 # The `all_vessel_df` has data up to LONGITUDE= only, meaning some data is outside of the window.
-# We pick a 0.5 / 2 degree tolerance based on the meteorological data grid. 
+# We pick a 0.5 / 2 degree tolerance based on the meteorological data grid.
 
 LON_MAX = all_vessel_df['LONGITUDE'].max() + 0.5
 LAT_MAX = all_vessel_df['LATITUDE'].max() + 0.5
@@ -110,7 +110,7 @@ plt.xlabel('Time gap (minutes)', size=18)
 plt.ylabel('Vessel', size=18)
 
 plt.tight_layout()
-plt.savefig('../images/Figure_1.png', dpi=750)
+plt.savefig('../images/Figure_1.pdf', format='pdf')
 plt.close()
 
 
@@ -227,8 +227,14 @@ plt.ylabel('SOG')
 plt.title('Speed Over Ground of Yi-Peng 3')
 
 plt.tight_layout()
-plt.savefig('../images/speed-over-ground-yipeng3.png', dpi=750)
+plt.savefig('../images/speed-over-ground-yipeng3.pdf', format='pdf')
 plt.close()
+
+
+print(
+    'VEZHEN above 2.5 knots',
+    np.mean(vezhen_even_df['SPEED'] >= 2.5)
+)
 
 
 sns.lineplot(
@@ -257,7 +263,7 @@ plt.ylabel('SOG')
 plt.title('Speed Over Ground of EAGLE S')
 
 plt.tight_layout()
-plt.savefig('../images/speed-over-ground-eagles.png', dpi=750)
+plt.savefig('../images/speed-over-ground-eagles.pdf', format='pdf')
 plt.close()
 
 
@@ -286,7 +292,7 @@ plt.ylabel('SOG')
 plt.title('Speed Over Ground of VEZHEN')
 
 plt.tight_layout()
-plt.savefig('../images/speed-over-ground-vezhen.png', dpi=750)
+plt.savefig('../images/speed-over-ground-vezhen.pdf',format='pdf' )
 plt.close()
 
 
@@ -331,7 +337,7 @@ plt.tick_params(axis='x', labelsize=14)
 plt.legend(fontsize=12)
 
 plt.tight_layout()
-plt.savefig('../images/Figure_3.png', dpi=750)
+plt.savefig('../images/Figure_3.pdf', format='pdf')
 plt.close()
 
 
@@ -432,7 +438,7 @@ for ax in axs:
     ax.tick_params(axis='both', labelsize=12)
 
 plt.tight_layout()
-plt.savefig('../images/features_yipeng3.png', dpi=750)
+plt.savefig('../images/features_yipeng3.pdf', format='pdf')
 plt.close()
 
 
@@ -480,7 +486,7 @@ ax.legend(loc='lower right', fontsize=10, framealpha=0.5)
 ax.tick_params(axis='both', labelsize=12)
 
 plt.tight_layout()
-plt.savefig('../images/delta-dif-eagles.png', dpi=750)
+plt.savefig('../images/delta-dif-eagles.pdf', format='pdf')
 plt.close()
 
 
@@ -554,7 +560,7 @@ for ax in axs:
     ax.tick_params(axis='both', labelsize=12)
 
 plt.tight_layout()
-plt.savefig('../images/deltacog-and-speed-eagle-s.png', dpi=750)
+plt.savefig('../images/deltacog-and-speed-eagle-s.pdf', format='pdf')
 plt.close()
 
 
@@ -636,7 +642,7 @@ for ax in axs:
     ax.tick_params(axis='both', labelsize=12)
 
 plt.tight_layout()
-plt.savefig('../images/features-eagle-s.png', dpi=750)
+plt.savefig('../images/features-eagle-s.pdf', format='pdf')
 plt.close()
 
 
@@ -691,7 +697,7 @@ ax.legend(loc="upper left", fontsize=10)
 ax.tick_params(axis='both', labelsize=12)
 
 plt.tight_layout()
-plt.savefig('../images/dif-vezhen.png', dpi=750)
+plt.savefig('../images/dif-vezhen.pdf', format='pdf')
 plt.close()
 
 
@@ -779,12 +785,12 @@ for ax in axs:
     ax.tick_params(axis='both', labelsize=12)
 
 plt.tight_layout()
-plt.savefig('../images/features-vezhen.png', dpi=750)
+plt.savefig('../images/features-vezhen.pdf', format='pdf')
 plt.close()
 
 
 # ## Trajectories
-# 
+#
 # - Both trajectories follow regular tracks overall.
 # - Eagle S trajectory becomes highly anomalous in the end - it does two loops.
 # - Vezhen trajectory is completely normal throughout the whole voyage. It is important to note that there was a turn towards a port.
