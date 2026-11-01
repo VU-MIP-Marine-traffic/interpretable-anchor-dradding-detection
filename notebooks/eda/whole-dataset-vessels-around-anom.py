@@ -23,6 +23,7 @@ df = pd.read_csv('../../data/Vessels_PositionReport_5min_25Dec2024_25Jan2025.csv
 
 df['DATE TIME (UTC)'] = pd.to_datetime(df['DATE TIME (UTC)'])
 df['day'] = df['DATE TIME (UTC)'].dt.date
+df = df[df['SPEED'] <= 25.0]
 
 
 def add_course_delta(group):
@@ -53,7 +54,7 @@ plt.ylabel(r'$|\Delta COG|$', size=16)
 plt.xlabel('SOG', size=16)
 plt.title(r'Absolute value of $\Delta COG$ and SOG', size=20)
 plt.tight_layout()
-plt.savefig('../images/delta_cog_speed.png')
+plt.savefig('../images/delta_cog_speed.pdf', format='pdf')
 plt.close()
 
 sns.kdeplot(data=df_, x='SPEED', y='dif_abs', fill=True)
@@ -61,7 +62,7 @@ plt.ylabel(r'$|DIF|$', size=16)
 plt.xlabel('SOG', size=16)
 plt.title(r'Absolute value of $DIF$ and SOG', size=20)
 plt.tight_layout()
-plt.savefig('../images/dif_speed.png')
+plt.savefig('../images/dif_speed.pdf', format='pdf')
 plt.close()
 
 sns.kdeplot(data=df_, x='SPEED', y='delta_dif_abs', fill=True)
@@ -69,5 +70,5 @@ plt.ylabel(r'$|\Delta DIF|$', size=16)
 plt.xlabel('SOG', size=16)
 plt.title(r'Absolute value of $\Delta DIF$ and SOG', size=20)
 plt.tight_layout()
-plt.savefig('../images/delta_dif_speed.png')
+plt.savefig('../images/delta_dif_speed.pdf', format='pdf')
 plt.close()

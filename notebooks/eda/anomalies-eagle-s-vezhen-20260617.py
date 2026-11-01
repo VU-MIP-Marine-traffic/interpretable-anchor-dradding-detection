@@ -299,7 +299,8 @@ plt.close()
 plt.plot(
     yipeng3_even_df['static_timestamp'],
     yipeng3_even_df['speed'],
-    label='Anchor dragging\nand crusing'
+    linestyle=(0, (1,1)),
+    label='Anchor dragging\nand crusing',
 )
 
 yipeng3_anchor_raising = yipeng3_even_df[
@@ -346,6 +347,7 @@ fig, axs = plt.subplots(nrows=3, figsize=(5, 7), sharex=True)
 axs[0].plot(
     yipeng3_even_df['static_timestamp'],
     yipeng3_even_df['dif'],
+    linestyle=(0, (1,1)),
     label='Anchor dragging and crusing'
 )
 
@@ -382,6 +384,7 @@ axs[0].legend(loc="upper right", fontsize=10, framealpha=0.5)
 axs[1].plot(
     yipeng3_even_df['static_timestamp'],
     yipeng3_even_df['delta_dif'],
+    linestyle=(0, (1,1)),
     label='Anchor dragging and crusing'
 )
 
@@ -409,6 +412,7 @@ axs[1].legend(loc="upper right", fontsize=10, framealpha=0.5)
 axs[2].plot(
     yipeng3_even_df['static_timestamp'],
     yipeng3_even_df['cog_delta'],
+    linestyle=(0, (1,1)),
     label='Anchor dragging and crusing'
 )
 
@@ -464,6 +468,7 @@ eagles_labels = [
 ax.plot(
     eagles_even_df_pre['DATE TIME (UTC)'],
     eagles_even_df_pre['delta_dif'],
+    linestyle=(0, (1,1)),
     label='Before and after\nsuspected anchor lowering'
 )
 ax.plot(
@@ -503,13 +508,14 @@ low_speed_mask = (
 timestamps_low_speed = eagles_even_df[low_speed_mask]['DATE TIME (UTC)']
 
 
-fig, axs = plt.subplots(nrows=2, figsize=(5, 5), sharex=True)
+fig, axs = plt.subplots(nrows=2, figsize=(6, 4), sharex=True)
 lower_bound = datetime(2024, 12, 25, 10, 45)
 upper_bound = datetime(2024, 12, 25, 16, 35)
 
 axs[0].plot(
     eagles_even_df['DATE TIME (UTC)'],
     eagles_even_df['SPEED'],
+    linestyle=(0, (1,1)),
     label='Anchor dragging\nand crusing'
 )
 axs[0].plot(
@@ -539,6 +545,7 @@ axs[0].legend(loc="lower right", fontsize=10)
 axs[1].plot(
     eagles_even_df['DATE TIME (UTC)'],
     eagles_even_df['delta_dif'],
+    linestyle=(0, (1,1)),
     label='Anchor dragging\nand crusing'
 )
 axs[1].plot(
@@ -571,6 +578,7 @@ upper_bound = datetime(2024, 12, 25, 16, 35)
 axs[0].plot(
     eagles_even_df['DATE TIME (UTC)'],
     eagles_even_df['dif'],
+    linestyle=(0, (1,1)),
     label='Anchor dragging\nand crusing'
 )
 axs[0].plot(
@@ -600,6 +608,7 @@ axs[0].legend(loc="upper right", fontsize=10)
 axs[1].plot(
     eagles_even_df['DATE TIME (UTC)'],
     eagles_even_df['delta_dif'],
+    linestyle=(0, (1,1)),
     label='Anchor dragging\nand crusing'
 )
 axs[1].plot(
@@ -620,6 +629,7 @@ axs[1].legend(loc="lower right", fontsize=10)
 axs[2].plot(
     eagles_even_df['DATE TIME (UTC)'],
     eagles_even_df['cog_delta'],
+    linestyle=(0, (1,1)),
     label='Anchor dragging\nand crusing'
 )
 axs[2].plot(
@@ -660,14 +670,15 @@ storm_end = 60
 print(vezhen_even_df['DATE TIME (UTC)'].values[storm_start:storm_end])
 
 
-fig, ax = plt.subplots(nrows=1, figsize=(5, 3))
+fig, ax = plt.subplots(nrows=1, figsize=(6, 3))
 lower_bound = datetime(2025, 1, 25, 0, 0)
 upper_bound = datetime(2025, 1, 26, 9, 45)
 
 ax.plot(
     vezhen_even_df['DATE TIME (UTC)'],
     vezhen_even_df['dif'],
-    label='Anchor dragging\nand crusing'
+    linestyle=(0, (1,1)),
+    label='Anchor dragging and crusing'
 )
 ax.plot(
     vezhen_even_df['DATE TIME (UTC)']\
@@ -708,6 +719,7 @@ upper_bound = datetime(2025, 1, 26, 9, 45)
 axs[0].plot(
     vezhen_even_df['DATE TIME (UTC)'],
     vezhen_even_df['dif'],
+    linestyle=(0, (1,1)),
     label='Anchor dragging\nand crusing'
 )
 axs[0].plot(
@@ -739,6 +751,7 @@ axs[0].legend(loc="upper left", fontsize=10)
 axs[1].plot(
     vezhen_even_df['DATE TIME (UTC)'],
     vezhen_even_df['delta_dif'],
+    linestyle=(0, (1,1)),
     label='Anchor dragging\nand crusing'
 )
 axs[1].plot(
@@ -761,6 +774,7 @@ axs[1].legend(loc="lower left", fontsize=10)
 axs[2].plot(
     vezhen_even_df['DATE TIME (UTC)'],
     vezhen_even_df['cog_delta'],
+    linestyle=(0, (1,1)),
     label='Anchor dragging\nand crusing'
 )
 axs[2].plot(
