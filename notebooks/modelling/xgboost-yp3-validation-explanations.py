@@ -144,7 +144,7 @@ fig, ax = plt.subplots()
 ax.plot(yipeng3_y[:, var_num])
 ax.plot(yipeng3_high)
 ax.plot(yipeng3_low)
-fig.savefig(IMAGE_DIR / 'delta-cog-xgboost-yipeng3.png')
+fig.savefig(IMAGE_DIR / 'delta-cog-xgboost-yipeng3.pdf', format='pdf', bbox_inches='tight')
 plt.close(fig)
 
 
@@ -209,7 +209,7 @@ fig, ax = plt.subplots()
 ax.plot(yipeng3_y[:, var_num])
 ax.plot(yipeng3_high)
 ax.plot(yipeng3_low)
-fig.savefig(IMAGE_DIR / 'delta-dif-xgboost-yipeng3.png')
+fig.savefig(IMAGE_DIR / 'delta-dif-xgboost-yipeng3.pdf', format='pdf', bbox_inches='tight')
 plt.close(fig)
 
 
@@ -328,7 +328,7 @@ for i in range(y_flat.shape[0]):
         anomalies_x.append(timestamps_yipeng3[i])
         anomalies_y.append(y_flat[i])
 
-fig = plt.figure()
+fig = plt.figure(figsize=(10,6))
 
 plt.plot(
     timestamps_yipeng3,
@@ -349,11 +349,11 @@ plt.xticks(
     ticks=ticks,
     labels=labels
 )
-plt.tick_params(axis='both', which='both', labelsize=13)
+plt.tick_params(axis='both', which='both', labelsize=20)
 
-plt.xlabel('Timestamp (UTC)', size=18)
-plt.ylabel(r'$DIF$', size=18)
-plt.title(r'Yi-Peng 3 $DIF$ PI', size=20)
+plt.xlabel('Timestamp (UTC)', size=24)
+plt.ylabel(r'$DIF$', size=24)
+plt.title(r'Yi-Peng 3 $DIF$ PI', size=32)
 
 plt.fill_between(
     x=timestamps_yipeng3,
@@ -370,10 +370,10 @@ plt.scatter(
     zorder=5,
     label='Anomalies'
 )
-plt.legend(fontsize=13)
+plt.legend(fontsize=20)
 
 plt.tight_layout()
-plt.savefig(IMAGE_DIR / 'dif-xgboost-yipeng3.png', dpi=750)
+plt.savefig(IMAGE_DIR / 'dif-xgboost-yipeng3.pdf', format='pdf', bbox_inches='tight')
 plt.close(fig)
 
 print(
@@ -449,7 +449,7 @@ axs[1].set_xlabel('MDI', size=18)
 axs[1].set_title('Upper bound', size=20)
 
 plt.tight_layout()
-plt.savefig(IMAGE_DIR / 'mdi-scores-xgboost-yp3.png', dpi=750)
+plt.savefig(IMAGE_DIR / 'mdi-scores-xgboost-yp3.pdf', format='pdf', bbox_inches='tight')
 plt.close(fig)
 
 print('MDI scores, lower bound (top 10):')
@@ -493,7 +493,7 @@ cbar.tick_params(labelsize=15)
 cbar.set_ylabel("Feature value", fontsize=18)
 
 plt.tight_layout()
-plt.savefig(IMAGE_DIR / 'shap-values-yipeng3.png', dpi=750)
+plt.savefig(IMAGE_DIR / 'shap-values-yipeng3.pdf', format='pdf', bbox_inches='tight')
 plt.close(fig)
 
 
@@ -615,7 +615,7 @@ def calculate_nmr(X_test_values, feature_names, quantile_alpha):
     print("NMR value : ", round(np.mean(rates), 3))
 
 
-print('calculating NMR for Yi-Peng 3 upper bound')
-calculate_nmr(yipeng3_x, feature_names, 0.975)
-print('calculating NMR for Yi-Peng 3 upper bound (repeat of the second notebook cell)')
-calculate_nmr(yipeng3_x, feature_names, 0.975)
+# print('calculating NMR for Yi-Peng 3 upper bound')
+# calculate_nmr(yipeng3_x, feature_names, 0.975)
+# print('calculating NMR for Yi-Peng 3 upper bound (repeat of the second notebook cell)')
+# calculate_nmr(yipeng3_x, feature_names, 0.975)

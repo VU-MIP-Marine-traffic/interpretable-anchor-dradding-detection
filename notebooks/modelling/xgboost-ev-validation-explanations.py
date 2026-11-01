@@ -280,7 +280,9 @@ def plot_pi(
     plot_labels: list,
     ax: plt.Axes,
     include_xtitle: bool = False,
-    legend_loc: str = None
+    include_legend: bool = False,
+    legend_loc: str = None,
+    legend_ncols: int = 1
 ):
     anomalies_x = []
     anomalies_y = []
@@ -296,7 +298,7 @@ def plot_pi(
     ax.plot(
         timestamps_eagles,
         y_true,
-        label="Target value",
+        label="Target\nvalue",
         color='black',
         alpha=0.6
     )
@@ -327,7 +329,7 @@ def plot_pi(
         y1=y_low,
         y2=y_high,
         alpha=0.3,
-        label='Prediction interval'
+        label='Prediction\ninterval'
     )
     ax.scatter(
         anomalies_x,
@@ -338,10 +340,12 @@ def plot_pi(
         label='Anomalies'
     )
 
-    if legend_loc:
-        ax.legend(fontsize=13, framealpha=0.5, loc=legend_loc)
+    if not include_legend:
+        ax.legend().remove()
+    elif legend_loc:
+        ax.legend(fontsize=13, framealpha=0.5, loc=legend_loc, ncols=legend_ncols)
     else:
-        ax.legend(fontsize=13, framealpha=0.5, loc='upper right')
+        ax.legend(fontsize=13, framealpha=0.5, loc='upper right', ncols=legend_ncols)
 
 
 plt.style.use('bmh')
@@ -349,7 +353,7 @@ plt.rcParams['axes.facecolor'] = 'white'
 
 fig, axs = plt.subplots(
     nrows=3,
-    figsize=(6, 8),
+    figsize=(8, 8),
     gridspec_kw={'hspace': 0.25},
     sharex=True
 )
@@ -373,7 +377,8 @@ plot_pi(
     ticks,
     labels,
     ax=axs[0],
-    legend_loc='lower right'
+    legend_loc='lower right',
+    include_legend=False
 )
 
 plot_pi(
@@ -384,7 +389,8 @@ plot_pi(
     eagles_high_delta_dif[:, 0],
     ticks,
     labels,
-    ax=axs[1]
+    ax=axs[1],
+    include_legend=False
 )
 
 plot_pi(
@@ -396,11 +402,14 @@ plot_pi(
     ticks,
     labels,
     ax=axs[2],
-    include_xtitle=True
+    include_xtitle=True,
+    include_legend=True,
+    legend_ncols=3,
+    legend_loc='lower center'
 )
 
 plt.tight_layout()
-plt.savefig(IMAGE_DIR / 'eagles-results.png', dpi=750)
+plt.savefig(IMAGE_DIR / 'eagles-results.pdf', format='pdf', bbox_inches='tight')
 plt.close(fig)
 
 
@@ -515,7 +524,7 @@ cbar.tick_params(labelsize=15)
 cbar.set_ylabel("Feature value", fontsize=18)
 
 plt.tight_layout()
-plt.savefig(IMAGE_DIR / 'shap-values-eagles.png', dpi=750)
+plt.savefig(IMAGE_DIR / 'shap-values-eagles.pdf', format='pdf', bbox_inches='tight')
 plt.close(fig)
 
 
@@ -565,7 +574,7 @@ cbar.tick_params(labelsize=15)
 cbar.set_ylabel("Feature value", fontsize=18)
 
 plt.tight_layout()
-plt.savefig(IMAGE_DIR / 'shap-values-vezhen.png', dpi=750)
+plt.savefig(IMAGE_DIR / 'shap-values-vezhen.pdf', format='pdf', bbox_inches='tight')
 plt.close(fig)
 
 
@@ -613,7 +622,7 @@ axs[1].set_xlabel('MDI', size=18)
 axs[1].set_title('Upper bound', size=20)
 
 plt.tight_layout()
-plt.savefig(IMAGE_DIR / 'mdi-scores-xgboost-ev.png', dpi=750)
+plt.savefig(IMAGE_DIR / 'mdi-scores-xgboost-ev.pdf', format='pdf', bbox_inches='tight')
 plt.close(fig)
 
 

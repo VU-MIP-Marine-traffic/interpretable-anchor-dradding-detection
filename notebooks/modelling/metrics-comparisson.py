@@ -135,7 +135,7 @@ ax2.set_ylim((0.0, 0.65))
 ax1.set_title('PI metrics in EV dataset', size=20)
 
 fig.tight_layout()
-fig.savefig('../images/dataset-ev-metrics.png', dpi=750)
+fig.savefig('../images/dataset-ev-metrics.pdf', format='pdf', bbox_inches='tight')
 
 
 fig, (ax1, ax2) = plt.subplots(nrows=2, sharex=True)
@@ -170,7 +170,7 @@ sns.lineplot(
 
 ax1.set_ylabel(r'$DIF\ $ PICP', size=16)
 ax1.tick_params(axis='y', labelsize=14)
-ax1.legend(loc='lower right', framealpha=0.7)
+ax1.legend(loc='lower right', framealpha=0.7, fontsize=16)
 ax1.set_yticks(
     ticks=[0.9, 0.95, 1.0],
     labels=[0.9, 0.95, 1.0]
@@ -180,7 +180,7 @@ ax1.set_ylim((0.9, 1.0))
 ax2.set_xlabel('Time step', size=16)
 ax2.tick_params(axis='both', labelsize=14)
 ax2.set_ylabel(r'$DIF\ $ PINAW', size=16)
-ax2.legend(loc='lower right', framealpha=0.7)
+ax2.legend(loc='lower right', framealpha=0.7, fontsize=16)
 ax2.set_xticks(
     ticks=range(5, 30, 5),
     labels=range(5, 30, 5)
@@ -190,7 +190,7 @@ ax2.set_ylim((0.0, 0.8))
 ax1.set_title('PI metrics in YP3 dataset', size=20)
 
 fig.tight_layout()
-fig.savefig('../images/dataset-yp3-metrics.png', dpi=750)
+fig.savefig('../images/dataset-yp3-metrics.pdf', format='pdf', bbox_inches='tight')
 
 
 # Parts of code from https://github.com/mwaskom/seaborn/issues/1456#issuecomment-399002203:
@@ -203,9 +203,9 @@ fig, axs = plt.subplots(
 
 fig.suptitle('Loss of lower and upper bound models', size=20)
 
-hatches = ['//', 'o', '+']
+hatches = ['//', '..', '++']
 hatches_cycle = cycle(hatches)
-colors = ['#85c63d', '#3d85c6', '#c63d85']
+colors = ['#007191', '#f47a00', '#d31f11']
 
 sns.barplot(
     data=df[
@@ -237,23 +237,26 @@ import matplotlib.patches as mpatches
 
 circ1 = mpatches.Patch(
     facecolor=colors[0],
+    edgecolor='white',
     hatch=hatches[0],
     label='LSTM-AE'
 )
 
 circ2 = mpatches.Patch(
     facecolor=colors[1],
+    edgecolor='white',
     hatch=hatches[1],
     label='QRF'
 )
 
 circ3 = mpatches.Patch(
     facecolor=colors[2],
+    edgecolor='white',
     hatch=hatches[2],
     label='XGBoost'
 )
 
-axs[0].legend(handles=[circ1, circ2, circ3])
+axs[0].legend(handles=[circ1, circ2, circ3], fontsize=14, loc='lower left')
 plt.tight_layout()
 
 axs[0].set_xticklabels(
@@ -266,9 +269,9 @@ axs[0].set_xlabel('')
 axs[0].set_title('Dataset EV', size=15)
 
 
-hatches = ['//', 'o', '+']
+hatches = ['//', '..', '++']
 hatches_cycle = cycle(hatches)
-colors = ['#85c63d', '#3d85c6', '#c63d85']
+colors = ['#007191', '#f47a00', '#d31f11']
 
 sns.barplot(
     data=df[
@@ -294,37 +297,41 @@ for i, patch in enumerate(axs[1].patches):
 # Source - https://stackoverflow.com/a/44937210
 # Posted by Andras Deak -- Слава Україні
 # Retrieved 2026-09-25, License - CC BY-SA 3.0
+#
+# also: https://claude.ai/share/b170e2b2-bfda-46e4-bdfd-a45b5eb4242f
 
 circ1 = mpatches.Patch(
     facecolor=colors[0],
+    edgecolor='white',
     hatch=hatches[0],
     label='LSTM-AE'
 )
 
 circ2 = mpatches.Patch(
     facecolor=colors[1],
+    edgecolor='white',
     hatch=hatches[1],
     label='QRF'
 )
 
 circ3 = mpatches.Patch(
     facecolor=colors[2],
+    edgecolor='white',
     hatch=hatches[2],
     label='XGBoost'
 )
 
-axs[1].legend(handles=[circ1, circ2, circ3])
-plt.tight_layout()
+axs[1].legend(handles=[circ1, circ2, circ3], fontsize=14, loc='lower left')
 
 axs[1].set_xticklabels(
     ['Loss lower bound', 'Loss upper bound'],
     size=16
 )
-axs[0].set_ylabel('Metirc value', size=18)
-axs[1].set_ylabel('Metirc value', size=18)
+axs[0].set_ylabel('Metric value', size=18)
+axs[1].set_ylabel('Metric value', size=18)
 axs[1].tick_params(axis='both', labelsize=14)
 axs[1].set_xlabel('Metric', size=16)
 axs[1].set_title('Dataset YP3', size=15)
 
 fig.tight_layout()
-fig.savefig('../images/loss-ev-yp3.png', dpi=750)
+fig.savefig('../images/loss-ev-yp3.pdf', format='pdf', bbox_inches='tight')
