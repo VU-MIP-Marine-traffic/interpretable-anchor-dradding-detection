@@ -1,5 +1,5 @@
 """
-Requires (ChatGPT 5.6 helped identify this):
+Requires:
 - output/data_yipeng3/qrf/X_train.npy
 - output/data_yipeng3/qrf/y_train.npy
 - output/data_yipeng3/qrf/X_val.npy

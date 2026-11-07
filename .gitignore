@@ -1,6 +1,7 @@
 *.pdf
 *.sif
 *.def
+.zed/
 
 *.csv
 *.parquet

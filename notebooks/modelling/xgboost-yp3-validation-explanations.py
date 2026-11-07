@@ -427,7 +427,8 @@ def top_mdi(model, n=10):
 fig, axs = plt.subplots(nrows=2, figsize=(6, 6))
 fig.suptitle('MDI scores of XGBoost models\nDataset YP3, $DIF$ target', size=20)
 
-top_mdi(model_low).plot.barh(ax=axs[0])
+shap_top_attrib_low = top_mdi(model_low)
+shap_top_attrib_low.plot.barh(ax=axs[0])
 
 # Source - https://stackoverflow.com/a/26845924
 # Posted by naitsirhc, modified by community. See post 'Timeline' for change history
@@ -463,6 +464,13 @@ print('MDI ratio (upper bound):', 0.178426 / 0.032979)
 
 fig, axs = plt.subplots(2, 1)
 plt.sca(axs[0])
+
+shap_low_values = np.array(shap_low.values)
+shap_low_base=  shap_low.base_values[0]
+
+print( 'SHAP base value',  shap_low_base )
+print( 'SHAP SOG min:', shap_low_values[:, 0].min() )
+
 shap.plots.beeswarm(shap_low[:75], show=False, plot_size=(8, 8), max_display=11)
 
 axs[0].set_title(
@@ -615,7 +623,7 @@ def calculate_nmr(X_test_values, feature_names, quantile_alpha):
     print("NMR value : ", round(np.mean(rates), 3))
 
 
-# print('calculating NMR for Yi-Peng 3 upper bound')
-# calculate_nmr(yipeng3_x, feature_names, 0.975)
-# print('calculating NMR for Yi-Peng 3 upper bound (repeat of the second notebook cell)')
-# calculate_nmr(yipeng3_x, feature_names, 0.975)
+print('calculating NMR for Yi-Peng 3 upper bound')
+calculate_nmr(yipeng3_x, feature_names, 0.975)
+print('calculating NMR for Yi-Peng 3 upper bound (repeat of the second notebook cell)')
+calculate_nmr(yipeng3_x, feature_names, 0.975)

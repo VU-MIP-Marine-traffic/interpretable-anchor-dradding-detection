@@ -6,12 +6,12 @@ import quantile_forest as qrf
 from sklearn.model_selection import KFold
 from sklearn.metrics import mean_pinball_loss #quantile loss
 
-X_train = np.load('output/data_eagles_vezhen/qrf/X_train.npy')
-y_train = np.load('output/data_eagles_vezhen/qrf/y_train.npy')
-X_test = np.load('output/data_eagles_vezhen/qrf/X_test.npy')
-y_test = np.load('output/data_eagles_vezhen/qrf/y_test.npy')
-X_val = np.load('output/data_eagles_vezhen/qrf/X_val.npy')
-y_val = np.load('output/data_eagles_vezhen/qrf/y_val.npy')
+X_train = np.load('output/data_eagles_vezhen/qrf/X_train2.npy')
+y_train = np.load('output/data_eagles_vezhen/qrf/y_train2.npy')
+X_test = np.load('output/data_eagles_vezhen/qrf/X_test2.npy')
+y_test = np.load('output/data_eagles_vezhen/qrf/y_test2.npy')
+X_val = np.load('output/data_eagles_vezhen/qrf/X_val2.npy')
+y_val = np.load('output/data_eagles_vezhen/qrf/y_val2.npy')
 
 SLIDINGW_STEPS = 5
 N_OUT_FEATS = y_train.shape[-1]
