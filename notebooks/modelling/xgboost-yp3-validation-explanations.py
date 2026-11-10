@@ -1,5 +1,5 @@
 """
-Responsible for XGBoost Yi-Peng 3 case validation, SHAP, MDI values
+Responsible for XGBoost YI-PENG 3 case validation, SHAP, MDI values
 
 Refactored with assistance from Anthropic Claude (Claude Sonnet 5.5).
 Changes made:
@@ -353,7 +353,7 @@ plt.tick_params(axis='both', which='both', labelsize=20)
 
 plt.xlabel('Timestamp (UTC)', size=24)
 plt.ylabel(r'$DIF$', size=24)
-plt.title(r'Yi-Peng 3 $DIF$ PI', size=32)
+plt.title(r'YI-PENG 3 $DIF$ PI', size=32)
 
 plt.fill_between(
     x=timestamps_yipeng3,
@@ -425,7 +425,7 @@ def top_mdi(model, n=10):
 
 
 fig, axs = plt.subplots(nrows=2, figsize=(6, 6))
-fig.suptitle('MDI scores of XGBoost models\nDataset YP3, $DIF$ target', size=20)
+fig.suptitle('Gain metric values of XGBoost models\nDataset YP3, $DIF$ target', size=20)
 
 shap_top_attrib_low = top_mdi(model_low)
 shap_top_attrib_low.plot.barh(ax=axs[0])
@@ -446,20 +446,20 @@ top_mdi(model_high).plot.barh(ax=axs[1])
 axs[1].get_legend().remove()
 axs[1].tick_params(axis='both', labelsize=14)
 axs[1].set_ylabel('Feature', size=18)
-axs[1].set_xlabel('MDI', size=18)
+axs[1].set_xlabel('Gain', size=18)
 axs[1].set_title('Upper bound', size=20)
 
 plt.tight_layout()
 plt.savefig(IMAGE_DIR / 'mdi-scores-xgboost-yp3.pdf', format='pdf', bbox_inches='tight')
 plt.close(fig)
 
-print('MDI scores, lower bound (top 10):')
+print('Gain metric values, lower bound (top 10):')
 print(top_mdi(model_low))
-print('MDI ratio (lower bound):', 0.157783 / 0.038165)
+print('Gain metric values ratio (lower bound):', 0.157783 / 0.038165)
 
-print('MDI scores, upper bound (top 10):')
+print('Gain metric values scores, upper bound (top 10):')
 print(top_mdi(model_high))
-print('MDI ratio (upper bound):', 0.178426 / 0.032979)
+print('Gain metris values ratio (upper bound):', 0.178426 / 0.032979)
 
 
 fig, axs = plt.subplots(2, 1)
@@ -474,7 +474,7 @@ print( 'SHAP SOG min:', shap_low_values[:, 0].min() )
 shap.plots.beeswarm(shap_low[:75], show=False, plot_size=(8, 8), max_display=11)
 
 axs[0].set_title(
-    'SHAP values for XGBoost (lower) \nfor the Yi-Peng 3 case, $DIF$ target',
+    'Lower bound model',
     size=20
 )
 axs[0].tick_params(axis='both', labelsize=16)
@@ -489,7 +489,7 @@ plt.sca(axs[1])
 shap.plots.beeswarm(shap_high[:75], show=False, plot_size=(8, 8), max_display=11)
 
 axs[1].set_title(
-    'SHAP values for XGBoost (upper) \nfor the Yi-Peng 3 case, $DIF$ target',
+    'Upper bound model',
     size=20
 )
 axs[1].tick_params(axis='both', labelsize=16)
@@ -499,6 +499,8 @@ axs[1].set_xlabel('SHAP value', size=18)
 cbar = plt.gcf().axes[1]
 cbar.tick_params(labelsize=15)
 cbar.set_ylabel("Feature value", fontsize=18)
+
+fig.suptitle('SHAP values for XGBoost\nYI-PENG 3 case evaluation, $DIF\ $ target', size=26)
 
 plt.tight_layout()
 plt.savefig(IMAGE_DIR / 'shap-values-yipeng3.pdf', format='pdf', bbox_inches='tight')
@@ -623,7 +625,7 @@ def calculate_nmr(X_test_values, feature_names, quantile_alpha):
     print("NMR value : ", round(np.mean(rates), 3))
 
 
-print('calculating NMR for Yi-Peng 3 upper bound')
+print('calculating NMR for YI-PENG 3 upper bound')
 calculate_nmr(yipeng3_x, feature_names, 0.975)
-print('calculating NMR for Yi-Peng 3 upper bound (repeat of the second notebook cell)')
+print('calculating NMR for YI-PENG 3 upper bound (repeat of the second notebook cell)')
 calculate_nmr(yipeng3_x, feature_names, 0.975)

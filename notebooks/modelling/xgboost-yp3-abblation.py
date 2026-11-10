@@ -108,7 +108,7 @@ def test_xgboost_feature(
                 [yipeng3_high, yipeng3_high_slice.reshape((-1, 1))],
                 axis=1
             )
-    
+
     group_results = {}
 
     for ix, (mmsi, day) in enumerate(zip(val_mmsis, val_days)):
@@ -200,11 +200,11 @@ meteo_features = [
 feature_names = [
     rf'${col}(t-{t})$' if t != 0 else f'${col}(t)$'
     for t in range(0, 25, 5)
-    for col in features 
+    for col in features
 ]
 keep_feature_mask = [
     any([meteo_feat in feature for meteo_feat in meteo_features])
-    for feature in feature_names 
+    for feature in feature_names
 ]
 
 print('Without weather variables:')

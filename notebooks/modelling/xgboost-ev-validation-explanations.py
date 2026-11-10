@@ -1,4 +1,4 @@
-# Responsible for XGBoost Eagle s and vezhen case validation, SHAP, MDI values
+# Responsible for XGBoost Eagle s and vezhen case validation, SHAP, Gain metric values
 
 # Refactored with assistance from OpenAI ChatGPT (GPT-6).
 # Changes made:
@@ -492,7 +492,7 @@ shap.plots.beeswarm(
 )
 
 axs[0].set_title(
-    'SHAP values for XGBoost (lower) \nfor the EAGLE S case, $DIF$ target',
+    'Lower bound model',
     size=20
 )
 axs[0].tick_params(axis='both', labelsize=16)
@@ -512,7 +512,7 @@ shap.plots.beeswarm(
 )
 
 axs[1].set_title(
-    'SHAP values for XGBoost (upper) \nfor the EAGLE S case, $DIF$ target',
+    'Upper bound model',
     size=20
 )
 axs[1].tick_params(axis='both', labelsize=16)
@@ -522,6 +522,8 @@ axs[1].set_xlabel('SHAP value', size=18)
 cbar = plt.gcf().axes[1]
 cbar.tick_params(labelsize=15)
 cbar.set_ylabel("Feature value", fontsize=18)
+
+fig.suptitle('SHAP values for XGBoost\nEAGLE S case evaluation, $DIF\ $ target', size=26)
 
 plt.tight_layout()
 plt.savefig(IMAGE_DIR / 'shap-values-eagles.pdf', format='pdf', bbox_inches='tight')
@@ -542,7 +544,7 @@ shap.plots.beeswarm(
 )
 
 axs[0].set_title(
-    'SHAP values for XGBoost (lower) \nfor the VEZHEN case, $DIF$ target',
+    'Lower bound model',
     size=20
 )
 axs[0].tick_params(axis='both', labelsize=16)
@@ -562,7 +564,7 @@ shap.plots.beeswarm(
 )
 
 axs[1].set_title(
-    'SHAP values for XGBoost (upper) \nfor the VEZHEN case, $DIF$ target',
+    'Upper bound model',
     size=20
 )
 axs[1].tick_params(axis='both', labelsize=16)
@@ -573,6 +575,8 @@ cbar = plt.gcf().axes[1]
 cbar.tick_params(labelsize=15)
 cbar.set_ylabel("Feature value", fontsize=18)
 
+fig.suptitle('SHAP values for XGBoost\nVEZHEN case evaluation, $DIF\ $ target', size=26)
+
 plt.tight_layout()
 plt.savefig(IMAGE_DIR / 'shap-values-vezhen.pdf', format='pdf', bbox_inches='tight')
 plt.close(fig)
@@ -580,7 +584,7 @@ plt.close(fig)
 
 fig, axs = plt.subplots(nrows=2, figsize=(6, 6))
 fig.suptitle(
-    'MDI scores of XGBoost models\nDataset EV, $DIF$ target',
+    'Gain metric values of XGBoost models\nDataset EV, $DIF$ target',
     size=20
 )
 
@@ -618,7 +622,7 @@ df_imp.set_index(keys='Feature') \
 axs[1].get_legend().remove()
 axs[1].tick_params(axis='both', labelsize=14)
 axs[1].set_ylabel('Feature', size=18)
-axs[1].set_xlabel('MDI', size=18)
+axs[1].set_xlabel('Gain', size=18)
 axs[1].set_title('Upper bound', size=20)
 
 plt.tight_layout()

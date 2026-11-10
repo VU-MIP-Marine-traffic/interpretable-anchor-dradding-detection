@@ -113,26 +113,26 @@ sns.lineplot(
     ax=ax2
 )
 
-ax1.set_ylabel(r'$DIF\ $ PICP', size=16)
-ax1.tick_params(axis='y', labelsize=14)
-ax1.legend(loc='lower right', framealpha=0.7)
+ax1.set_ylabel(r'$DIF\ $ PICP', size=22)
+ax1.tick_params(axis='y', labelsize=18)
+ax1.legend(loc='lower right', framealpha=0.7, ncols=3, fontsize=13)
 ax1.set_yticks(
     ticks=[0.9, 0.95, 1.0],
     labels=[0.9, 0.95, 1.0]
 )
 ax1.set_ylim((0.9, 1.0))
 
-ax2.set_xlabel('Time step', size=16)
-ax2.tick_params(axis='both', labelsize=14)
+ax2.set_xlabel('Time step', size=22)
+ax2.tick_params(axis='both', labelsize=18)
 ax2.set_ylabel(r'$DIF\ $ PINAW', size=16)
-ax2.legend(loc='lower right', framealpha=0.7)
+ax2.legend(loc='lower right', framealpha=0.7, ncols=3, fontsize=13)
 ax2.set_xticks(
     ticks=range(5, 30, 5),
     labels=range(5, 30, 5)
 )
 ax2.set_ylim((0.0, 0.65))
 
-ax1.set_title('PI metrics in EV dataset', size=20)
+ax1.set_title('PI metrics in EV dataset', size=26)
 
 fig.tight_layout()
 fig.savefig('../images/dataset-ev-metrics.pdf', format='pdf', bbox_inches='tight')
@@ -168,26 +168,26 @@ sns.lineplot(
     ax=ax2
 )
 
-ax1.set_ylabel(r'$DIF\ $ PICP', size=16)
-ax1.tick_params(axis='y', labelsize=14)
-ax1.legend(loc='lower right', framealpha=0.7, fontsize=16)
+ax1.set_ylabel(r'$DIF\ $ PICP', size=22)
+ax1.tick_params(axis='y', labelsize=18)
+ax1.legend(loc='lower right', framealpha=0.7, fontsize=13, ncols=3)
 ax1.set_yticks(
     ticks=[0.9, 0.95, 1.0],
     labels=[0.9, 0.95, 1.0]
 )
 ax1.set_ylim((0.9, 1.0))
 
-ax2.set_xlabel('Time step', size=16)
-ax2.tick_params(axis='both', labelsize=14)
-ax2.set_ylabel(r'$DIF\ $ PINAW', size=16)
-ax2.legend(loc='lower right', framealpha=0.7, fontsize=16)
+ax2.set_xlabel('Time step', size=22)
+ax2.tick_params(axis='both', labelsize=18)
+ax2.set_ylabel(r'$DIF\ $ PINAW', size=22)
+ax2.legend(loc='lower right', framealpha=0.7, fontsize=13, ncols=3)
 ax2.set_xticks(
     ticks=range(5, 30, 5),
     labels=range(5, 30, 5)
 )
-ax2.set_ylim((0.0, 0.8))
+ax2.set_ylim((0.0, 0.55))
 
-ax1.set_title('PI metrics in YP3 dataset', size=20)
+ax1.set_title('PI metrics in YP3 dataset', size=26)
 
 fig.tight_layout()
 fig.savefig('../images/dataset-yp3-metrics.pdf', format='pdf', bbox_inches='tight')
@@ -201,7 +201,7 @@ fig, axs = plt.subplots(
     sharex=True
 )
 
-fig.suptitle('Loss of lower and upper bound models', size=20)
+fig.suptitle('Loss of lower and upper bound models', size=26)
 
 hatches = ['//', '..', '++']
 hatches_cycle = cycle(hatches)
@@ -239,6 +239,7 @@ circ1 = mpatches.Patch(
     facecolor=colors[0],
     edgecolor='white',
     hatch=hatches[0],
+    alpha=0.99,
     label='LSTM-AE'
 )
 
@@ -246,6 +247,7 @@ circ2 = mpatches.Patch(
     facecolor=colors[1],
     edgecolor='white',
     hatch=hatches[1],
+    alpha=0.99,
     label='QRF'
 )
 
@@ -253,6 +255,7 @@ circ3 = mpatches.Patch(
     facecolor=colors[2],
     edgecolor='white',
     hatch=hatches[2],
+    alpha=0.99,
     label='XGBoost'
 )
 
@@ -304,6 +307,7 @@ circ1 = mpatches.Patch(
     facecolor=colors[0],
     edgecolor='white',
     hatch=hatches[0],
+    alpha=0.99,
     label='LSTM-AE'
 )
 
@@ -311,6 +315,7 @@ circ2 = mpatches.Patch(
     facecolor=colors[1],
     edgecolor='white',
     hatch=hatches[1],
+    alpha=0.99,
     label='QRF'
 )
 
@@ -318,6 +323,7 @@ circ3 = mpatches.Patch(
     facecolor=colors[2],
     edgecolor='white',
     hatch=hatches[2],
+    alpha=0.99,
     label='XGBoost'
 )
 

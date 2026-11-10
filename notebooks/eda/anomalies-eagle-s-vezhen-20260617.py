@@ -87,7 +87,7 @@ gaps_vezhen = vezhen_df['DATE TIME (UTC)'].diff(1) / timedelta(minutes=1)
 gaps_eagles = eagle_s_df['DATE TIME (UTC)'].diff(1) / timedelta(minutes=1)
 
 gaps_df = pd.DataFrame({
-    "Vessel": ['Yi-Peng 3'] * gaps_yipeng3.shape[0] + ['EAGLE S'] * gaps_eagles.shape[0] + ['VEZHEN'] * gaps_vezhen.shape[0],
+    "Vessel": ['YI-PENG 3'] * gaps_yipeng3.shape[0] + ['EAGLE S'] * gaps_eagles.shape[0] + ['VEZHEN'] * gaps_vezhen.shape[0],
     "Time gap": gaps_yipeng3.to_list() + gaps_eagles.to_list() + gaps_vezhen.to_list()
 })
 
@@ -114,7 +114,7 @@ plt.savefig('../images/Figure_1.pdf', format='pdf')
 plt.close()
 
 
-print('Mean time gap Yi-Peng 3 (minutes):', gaps_yipeng3.mean())
+print('Mean time gap YI-PENG 3 (minutes):', gaps_yipeng3.mean())
 
 
 print('Mean time gap EAGLE S (minutes):', gaps_eagles.mean())
@@ -224,7 +224,7 @@ plt.xticks(
 
 plt.xlabel('Time stamp of AIS signal in UTC')
 plt.ylabel('SOG')
-plt.title('Speed Over Ground of Yi-Peng 3')
+plt.title('Speed Over Ground of YI-PENG 3')
 
 plt.tight_layout()
 plt.savefig('../images/speed-over-ground-yipeng3.pdf', format='pdf')
@@ -300,7 +300,7 @@ plt.plot(
     yipeng3_even_df['static_timestamp'],
     yipeng3_even_df['speed'],
     linestyle=(0, (1,1)),
-    label='Anchor dragging\nand crusing',
+    label='Anchor dragging\nand cruising',
 )
 
 yipeng3_anchor_raising = yipeng3_even_df[
@@ -331,7 +331,7 @@ plt.xticks(
 
 plt.xlabel('Time stamp of AIS signal in UTC', size=16)
 plt.ylabel('SOG', size=16)
-plt.title('SOG of Yi-Peng 3', size=20)
+plt.title('SOG of YI-PENG 3', size=20)
 
 plt.tick_params(axis='y', labelsize=14)
 plt.tick_params(axis='x', labelsize=14)
@@ -348,7 +348,7 @@ axs[0].plot(
     yipeng3_even_df['static_timestamp'],
     yipeng3_even_df['dif'],
     linestyle=(0, (1,1)),
-    label='Anchor dragging and crusing'
+    label='Anchor dragging and cruising'
 )
 
 yipeng3_anchor_raising = yipeng3_even_df[
@@ -378,14 +378,14 @@ axs[0].set_xticks(
 )
 
 axs[0].set_ylabel('$DIF$', size=16)
-axs[0].set_title('$DIF$ of Yi-Peng 3')
+axs[0].set_title('$DIF$ of YI-PENG 3')
 axs[0].legend(loc="upper right", fontsize=10, framealpha=0.5)
 
 axs[1].plot(
     yipeng3_even_df['static_timestamp'],
     yipeng3_even_df['delta_dif'],
     linestyle=(0, (1,1)),
-    label='Anchor dragging and crusing'
+    label='Anchor dragging and cruising'
 )
 
 yipeng3_anchor_raising = yipeng3_even_df[
@@ -406,14 +406,14 @@ axs[1].set_xticks(
 )
 
 axs[1].set_ylabel('$\Delta DIF$', size=16)
-axs[1].set_title('$\Delta DIF$ of Yi-Peng 3')
+axs[1].set_title('$\Delta DIF$ of YI-PENG 3')
 axs[1].legend(loc="upper right", fontsize=10, framealpha=0.5)
 
 axs[2].plot(
     yipeng3_even_df['static_timestamp'],
     yipeng3_even_df['cog_delta'],
     linestyle=(0, (1,1)),
-    label='Anchor dragging and crusing'
+    label='Anchor dragging and cruising'
 )
 
 yipeng3_anchor_raising = yipeng3_even_df[
@@ -435,7 +435,7 @@ axs[2].set_xticks(
 
 axs[2].set_xlabel('Time stamp of AIS signal in UTC', size=16)
 axs[2].set_ylabel('$\Delta COG$', size=16)
-axs[2].set_title('$\Delta COG$ of Yi-Peng 3', size=18)
+axs[2].set_title('$\Delta COG$ of YI-PENG 3', size=18)
 axs[2].legend(loc='lower right', fontsize=10, framealpha=0.5)
 
 for ax in axs:
@@ -516,7 +516,7 @@ axs[0].plot(
     eagles_even_df['DATE TIME (UTC)'],
     eagles_even_df['SPEED'],
     linestyle=(0, (1,1)),
-    label='Anchor dragging\nand crusing'
+    label='Anchor dragging\nand cruising'
 )
 axs[0].plot(
     timestamps_low_speed,
@@ -546,7 +546,7 @@ axs[1].plot(
     eagles_even_df['DATE TIME (UTC)'],
     eagles_even_df['delta_dif'],
     linestyle=(0, (1,1)),
-    label='Anchor dragging\nand crusing'
+    label='Anchor dragging\nand cruising'
 )
 axs[1].plot(
     timestamps_low_speed,
@@ -579,7 +579,7 @@ axs[0].plot(
     eagles_even_df['DATE TIME (UTC)'],
     eagles_even_df['dif'],
     linestyle=(0, (1,1)),
-    label='Anchor dragging\nand crusing'
+    label='Anchor dragging\nand cruising'
 )
 axs[0].plot(
     timestamps_low_speed,
@@ -609,7 +609,7 @@ axs[1].plot(
     eagles_even_df['DATE TIME (UTC)'],
     eagles_even_df['delta_dif'],
     linestyle=(0, (1,1)),
-    label='Anchor dragging\nand crusing'
+    label='Anchor dragging\nand cruising'
 )
 axs[1].plot(
     timestamps_low_speed,
@@ -630,7 +630,7 @@ axs[2].plot(
     eagles_even_df['DATE TIME (UTC)'],
     eagles_even_df['cog_delta'],
     linestyle=(0, (1,1)),
-    label='Anchor dragging\nand crusing'
+    label='Anchor dragging\nand cruising'
 )
 axs[2].plot(
     timestamps_low_speed,
@@ -678,7 +678,7 @@ ax.plot(
     vezhen_even_df['DATE TIME (UTC)'],
     vezhen_even_df['dif'],
     linestyle=(0, (1,1)),
-    label='Anchor dragging and crusing'
+    label='Anchor dragging and cruising'
 )
 ax.plot(
     vezhen_even_df['DATE TIME (UTC)']\
@@ -720,7 +720,7 @@ axs[0].plot(
     vezhen_even_df['DATE TIME (UTC)'],
     vezhen_even_df['dif'],
     linestyle=(0, (1,1)),
-    label='Anchor dragging\nand crusing'
+    label='Anchor dragging\nand cruising'
 )
 axs[0].plot(
     vezhen_even_df['DATE TIME (UTC)']\
@@ -752,7 +752,7 @@ axs[1].plot(
     vezhen_even_df['DATE TIME (UTC)'],
     vezhen_even_df['delta_dif'],
     linestyle=(0, (1,1)),
-    label='Anchor dragging\nand crusing'
+    label='Anchor dragging\nand cruising'
 )
 axs[1].plot(
     vezhen_even_df['DATE TIME (UTC)']\
@@ -775,7 +775,7 @@ axs[2].plot(
     vezhen_even_df['DATE TIME (UTC)'],
     vezhen_even_df['cog_delta'],
     linestyle=(0, (1,1)),
-    label='Anchor dragging\nand crusing'
+    label='Anchor dragging\nand cruising'
 )
 axs[2].plot(
     vezhen_even_df['DATE TIME (UTC)']\
