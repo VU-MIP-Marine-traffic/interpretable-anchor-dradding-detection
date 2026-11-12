@@ -71,7 +71,7 @@ vezhen_y = np.load(
 ).reshape((-1, 5, 3))
 
 
-tf.random.set_seed(42)
+tf.keras.utils.set_random_seed(42)
 
 
 X_train = np.load(

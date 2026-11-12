@@ -41,6 +41,7 @@ LON_MAX = 25.5 + TOLERANCE
 LAT_MIN = 57.0 - TOLERANCE
 LAT_MAX = 60.5 + TOLERANCE
 
+EAGLES_SEVER = datetime(2024, 12, 25, 10, 0)
 EAGLES_TAKEOVER = datetime(2024, 12, 25, 16, 40)
 
 EAGLES_MMSI = 518998865
@@ -66,7 +67,7 @@ raw_df = raw_df[raw_df['HEADING'] >= 0.0]
 raw_df = raw_df[raw_df['COURSE'] <= 360.0]
 raw_df = raw_df[raw_df['HEADING'] <= 360.0]
 
-# cap speed 
+# cap speed
 raw_df.loc[raw_df['SPEED'] > 25, 'SPEED'] = np.nan
 
 # Keep only underway data
@@ -90,8 +91,8 @@ raw_df['DATE TIME (UTC)'] = pd.to_datetime(raw_df['DATE TIME (UTC)'])
 
 # Filter to make sure we have enough data of normal ships
 raw_df = raw_df[
-    (raw_df['LATITUDE'].between(LAT_MIN, LAT_MAX)) &
-    (raw_df['LONGITUDE'].between(LON_MIN, LON_MAX))
+    ( (raw_df['LATITUDE'].between(LAT_MIN, LAT_MAX)) & (raw_df['LONGITUDE'].between(LON_MIN, LON_MAX)) ) |
+    ( (raw_df['MMSI'] == EAGLES_MMSI) & (raw_df['DATE TIME (UTC)'] > EAGLES_SEVER) )
 ]
 
 # Filter to make sure that the EAGLE S take-over is not included
@@ -139,14 +140,14 @@ for mmsi, mmsi_df in grouped_df:
     mmsi_df, timestamps = feature_engineering(mmsi_df)
     mmsi_df = mmsi_df.dropna()
 
+    print(mmsi, timestamps.min(), timestamps.max())
+
     mmsi_df['MMSI'] = int(mmsi)
     dfs.append( mmsi_df )
 
 df = pd.concat( dfs, ignore_index=True )
 
 min_max_scale_cols = [
-    # 'LATITUDE',
-    # 'LONGITUDE',
     'SPEED',
     'currentSpeed',
     'gust',

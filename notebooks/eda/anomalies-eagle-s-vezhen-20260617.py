@@ -57,7 +57,8 @@ LAT_MAX = all_vessel_df['LATITUDE'].max() + 0.5
 LON_MIN = all_vessel_df['LONGITUDE'].min() - 0.5
 LAT_MIN = all_vessel_df['LATITUDE'].min() - 0.5
 
-EAGLES_TIME_MAX = datetime(2024,12,25,16,40)
+EAGLES_TIME_MIN = datetime(2024,12,25,10,0)
+EAGLES_TIME_MAX = datetime(2024,12,25,16,35)
 
 
 yipeng3_df.sort_values('static_timestamp', inplace=True)
@@ -72,10 +73,14 @@ vezhen_df['DATE TIME (UTC)'] = pd.to_datetime(vezhen_df['DATE TIME (UTC)'])
 eagle_s_df['DATE TIME (UTC)'] = pd.to_datetime(eagle_s_df['DATE TIME (UTC)'])
 
 eagle_s_df = eagle_s_df[
-    (eagle_s_df['LATITUDE'].between(LAT_MIN, LAT_MAX)) &
-    (eagle_s_df['LONGITUDE'].between(LON_MIN, LON_MAX)) &
+    (
+        ((eagle_s_df['LATITUDE'].between(LAT_MIN, LAT_MAX)) &
+        (eagle_s_df['LONGITUDE'].between(LON_MIN, LON_MAX))) |
+        (eagle_s_df['DATE TIME (UTC)'] > EAGLES_TIME_MIN)
+    ) &
     (eagle_s_df['DATE TIME (UTC)'] < EAGLES_TIME_MAX)
 ]
+
 vezhen_df = vezhen_df[
     (vezhen_df['LATITUDE'].between(LAT_MIN, LAT_MAX)) &
     (vezhen_df['LONGITUDE'].between(LON_MIN, LON_MAX))
@@ -172,8 +177,7 @@ eagles_even_df['cog_delta'] = eagles_even_df['cog_delta'] / eagles_even_df['date
 vezhen_even_df['cog_delta'] = ( vezhen_even_df['COURSE'].diff(1) + 180) % 360 - 180
 vezhen_even_df['cog_delta'] = vezhen_even_df['cog_delta'] / vezhen_even_df['date_diff']
 
-
-# ### Normalize
+### Normalize
 
 vezhen_even_df['dif'] = vezhen_even_df['dif'] / 180 * 5
 eagles_even_df['dif'] = eagles_even_df['dif'] / 180 * 5
@@ -237,6 +241,7 @@ print(
 )
 
 
+print(eagles_even_df['DATE TIME (UTC)'].min())
 sns.lineplot(
     eagles_even_df,
     y='SPEED',
@@ -244,7 +249,7 @@ sns.lineplot(
 )
 
 eagle_ticks = [
-    datetime(2024, 12, 25, 10, 45) + timedelta(hours=i)
+    datetime(2024, 12, 25, 10, 20) + timedelta(hours=i)
     for i in range(0, 8, 2)
 ]
 eagle_labels = [
@@ -435,7 +440,7 @@ axs[2].set_xticks(
 
 axs[2].set_xlabel('Time stamp of AIS signal in UTC', size=16)
 axs[2].set_ylabel('$\Delta COG$', size=16)
-axs[2].set_title('$\Delta COG$ of YI-PENG 3', size=18)
+axs[2].set_title('$\Delta COG$ of YI-PENG 3')
 axs[2].legend(loc='lower right', fontsize=10, framealpha=0.5)
 
 for ax in axs:
@@ -457,7 +462,7 @@ eagles_even_df_raise = eagles_even_df[
 ]
 
 eagles_ticks = [
-    datetime(2024, 12, 25, 10, 45) + timedelta(hours=i)
+    datetime(2024, 12, 25, 10, 20) + timedelta(hours=i)
     for i in range(0, 7, 3)
 ]
 eagles_labels = [
@@ -465,12 +470,17 @@ eagles_labels = [
     for tick in eagles_ticks
 ]
 
+print( eagles_even_df_pre[
+    ~eagles_even_df_pre['delta_dif'].isnull()
+]['DATE TIME (UTC)'].min() )
+
 ax.plot(
     eagles_even_df_pre['DATE TIME (UTC)'],
     eagles_even_df_pre['delta_dif'],
     linestyle=(0, (1,1)),
     label='Before and after\nsuspected anchor lowering'
 )
+
 ax.plot(
     eagles_even_df_raise['DATE TIME (UTC)'],
     eagles_even_df_raise['delta_dif'],
@@ -525,7 +535,7 @@ axs[0].plot(
     color='red'
 )
 eagles_ticks = [
-    datetime(2024, 12, 25, 10, 45) + timedelta(hours=i)
+    datetime(2024, 12, 25, 10, 20) + timedelta(hours=i)
     for i in range(0, 8, 2)
 ]
 eagles_labels = [
@@ -572,7 +582,7 @@ plt.close()
 
 
 fig, axs = plt.subplots(nrows=3, figsize=(5, 7), sharex=True)
-lower_bound = datetime(2024, 12, 25, 10, 45)
+lower_bound = datetime(2024, 12, 25, 10, 20)
 upper_bound = datetime(2024, 12, 25, 16, 35)
 
 axs[0].plot(
@@ -588,7 +598,7 @@ axs[0].plot(
     color='red'
 )
 eagles_ticks = [
-    datetime(2024, 12, 25, 10, 45) + timedelta(hours=i)
+    datetime(2024, 12, 25, 10, 20) + timedelta(hours=i)
     for i in range(0, 8, 2)
 ]
 eagles_labels = [

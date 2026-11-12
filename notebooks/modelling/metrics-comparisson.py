@@ -94,7 +94,7 @@ sns.lineplot(
     y='dif',
     hue='Architecture',
     markers='o',
-    errorbar=('se', 3),
+    errorbar=('pi', 95),
     style='Architecture',
     ax=ax1
 )
@@ -109,7 +109,7 @@ sns.lineplot(
     hue='Architecture',
     style='Architecture',
     markers='o',
-    errorbar=('se', 3),
+    errorbar=('pi', 95),
     ax=ax2
 )
 
@@ -149,7 +149,7 @@ sns.lineplot(
     y='dif',
     hue='Architecture',
     markers='o',
-    errorbar=('se', 3),
+    errorbar=('pi', 95),
     style='Architecture',
     ax=ax1
 )
@@ -164,7 +164,7 @@ sns.lineplot(
     hue='Architecture',
     style='Architecture',
     markers='o',
-    errorbar=('se', 3),
+    errorbar=('pi', 95),
     ax=ax2
 )
 

@@ -89,14 +89,6 @@ y_train = np.load(
     '../../output/data_yipeng3/lstm-ae/y_train.npy'
 )
 
-X_test = np.load(
-    '../../output/data_yipeng3/lstm-ae/X_test.npy'
-)
-
-y_test = np.load(
-    '../../output/data_yipeng3/lstm-ae/y_test.npy'
-)
-
 X_val = np.load(
     '../../output/data_yipeng3/lstm-ae/X_val.npy'
 )
@@ -110,18 +102,18 @@ train_dataset = (
     tf.data.Dataset
     .from_tensor_slices((X_train, y_train))
     .batch(64)
-    .shuffle(buffer_size=10_000)
+    .shuffle(buffer_size=10_000, seed=42)
 )
 
 val_dataset = (
     tf.data.Dataset
     .from_tensor_slices((X_val, y_val))
     .batch(64)
-    .shuffle(buffer_size=10_000)
+    .shuffle(buffer_size=10_000, seed=42)
 )
 
 
-tf.random.set_seed(42)
+tf.keras.utils.set_random_seed(42)
 
 
 # Train the lower quantile model.
@@ -187,33 +179,10 @@ history_high = model_high.fit(
 )
 
 
-# Lower quantile model training history.
-plt.plot(history_low.history['loss'], label='loss')
-plt.plot(history_low.history['val_loss'], label='val_loss')
-plt.legend()
-plt.savefig('../images/lstm_ae_low_training_history.png')
-plt.close()
-
-
-# Upper quantile model training history.
-plt.plot(history_high.history['loss'], label='loss')
-plt.plot(history_high.history['val_loss'], label='val_loss')
-plt.legend()
-plt.savefig('../images/lstm_ae_high_training_history.png')
-plt.close()
-
-
 # Generate Yipeng 3 prediction intervals.
 yipeng3_output_high = model_high.predict(yipeng3_x)
 yipeng3_output_low = model_low.predict(yipeng3_x)
 
-
-# Yipeng 3 delta COG prediction interval.
-plt.plot(yipeng3_output_high[:, 0, 0])
-plt.plot(yipeng3_output_low[:, 0, 0])
-plt.plot(yipeng3_y[:, 0, 0])
-plt.savefig('../images/yipeng3_prediction_interval_delta_cog.png')
-plt.close()
 
 delta_cog_coverage = np.mean(
     (yipeng3_y[:, :, 0] > yipeng3_output_low[:, :, 0])
@@ -225,13 +194,6 @@ print(
     delta_cog_coverage,
 )
 
-
-# Yipeng 3 delta DIF prediction interval.
-plt.plot(yipeng3_output_high[:, 0, 1])
-plt.plot(yipeng3_output_low[:, 0, 1])
-plt.plot(yipeng3_y[:, 0, 1])
-plt.savefig('../images/yipeng3_prediction_interval_delta_dif.png')
-plt.close()
 
 delta_dif_coverage = np.mean(
     (yipeng3_y[:, :, 1] > yipeng3_output_low[:, :, 1])
@@ -256,9 +218,69 @@ dif_coverage = np.mean(
     & (yipeng3_y[:, :, 2] < yipeng3_output_high[:, :, 2])
 )
 
+# Calculate validation-set prediction interval coverage.
+y_val_low = model_low.predict(X_val)
+y_val_high = model_high.predict(X_val)
+
+val_mmsis = np.load(
+    '../../output/data_yipeng3/lstm-ae/val-mmsis.npy',
+    allow_pickle=True,
+)
+
+val_days = np.load(
+    '../../output/data_yipeng3/lstm-ae/val-days.npy',
+    allow_pickle=True,
+)
+
+in_pi_mask = (y_val > y_val_low) & (y_val < y_val_high)
+in_pi_mask = in_pi_mask.reshape((-1, 5, 3))
+
+group_results = {}
+
+for ix, (mmsi, day) in enumerate(zip(val_mmsis, val_days)):
+    group_results.setdefault((mmsi, day), []).append(in_pi_mask[ix])
+
+df = []
+
+for (mmsi, day), pi_masks in group_results.items():
+    means = np.array(pi_masks).mean(axis=1).mean(axis=0)
+
+    df.append(
+        {
+            'mmsi': mmsi,
+            'day': day,
+            'delta_cog': means[0],
+            'delta_dif': means[1],
+            'dif': means[2],
+        }
+    )
+
+df = pd.DataFrame(df)
+
+thresh_delta_cog = np.quantile(df['delta_cog'], 0.05)
+thresh_delta_dif = np.quantile(df['delta_dif'], 0.05)
+thresh_dif = np.quantile(df['dif'], 0.05)
+
+del X_val, y_val
+
+print('delta_cog limit:', thresh_delta_cog)
+print('delta_dif limit:', thresh_delta_dif)
+print('dif limit:', thresh_dif)
+
+
+
 print(
     'Yipeng3 dif prediction interval coverage:',
     dif_coverage,
+)
+
+
+X_test = np.load(
+    '../../output/data_yipeng3/lstm-ae/X_test.npy'
+)
+
+y_test = np.load(
+    '../../output/data_yipeng3/lstm-ae/y_test.npy'
 )
 
 
@@ -370,52 +392,6 @@ df_loss_high.to_csv(
 )
 
 
-# Calculate validation-set prediction interval coverage.
-y_val_low = model_low.predict(X_val)
-y_val_high = model_high.predict(X_val)
-
-val_mmsis = np.load(
-    '../../output/data_yipeng3/lstm-ae/val-mmsis.npy',
-    allow_pickle=True,
-)
-
-val_days = np.load(
-    '../../output/data_yipeng3/lstm-ae/val-days.npy',
-    allow_pickle=True,
-)
-
-in_pi_mask = (y_val > y_val_low) & (y_val < y_val_high)
-in_pi_mask = in_pi_mask.reshape((-1, 5, 3))
-
-group_results = {}
-
-for ix, (mmsi, day) in enumerate(zip(val_mmsis, val_days)):
-    group_results.setdefault((mmsi, day), []).append(in_pi_mask[ix])
-
-df = []
-
-for (mmsi, day), pi_masks in group_results.items():
-    means = np.array(pi_masks).mean(axis=1).mean(axis=0)
-
-    df.append(
-        {
-            'mmsi': mmsi,
-            'day': day,
-            'delta_cog': means[0],
-            'delta_dif': means[1],
-            'dif': means[2],
-        }
-    )
-
-df = pd.DataFrame(df)
-
-thresh_delta_cog = np.quantile(df['delta_cog'], 0.05)
-thresh_delta_dif = np.quantile(df['delta_dif'], 0.05)
-thresh_dif = np.quantile(df['dif'], 0.05)
-
-print('delta_cog limit:', thresh_delta_cog)
-print('delta_dif limit:', thresh_delta_dif)
-print('dif limit:', thresh_dif)
 
 
 # Calculate test-set prediction interval coverage.

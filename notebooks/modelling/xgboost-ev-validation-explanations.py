@@ -18,6 +18,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import shap
+import pytz
 
 from pathlib import Path
 from datetime import datetime, timedelta
@@ -265,7 +266,7 @@ best_hyper = {
 
 
 timestamps_eagles = pd.date_range(
-    start=datetime(2024, 12, 25, 10, 45),
+    start=datetime(2024, 12, 25, 10, 20),
     end=datetime(2024, 12, 25, 16, 40),
     periods=eagles_x.shape[0]
 )
@@ -315,6 +316,13 @@ def plot_pi(
         linestyle='--'
     )
 
+    ax.axvline(
+        x=datetime(2024, 12, 25, 10, 26, tzinfo=pytz.utc),
+        color="#a88080",
+        linestyle='--',
+        label='Estlink-2 cut',
+    )
+
     ax.set_xticks(ticks=plot_ticks, labels=plot_labels)
     ax.tick_params(axis='both', which='both', labelsize=13)
 
@@ -343,7 +351,7 @@ def plot_pi(
     if not include_legend:
         ax.legend().remove()
     elif legend_loc:
-        ax.legend(fontsize=13, framealpha=0.5, loc=legend_loc, ncols=legend_ncols)
+        ax.legend(fontsize=13, framealpha=0.5, loc='upper center', ncols=legend_ncols, bbox_to_anchor=(0.5, -0.4))
     else:
         ax.legend(fontsize=13, framealpha=0.5, loc='upper right', ncols=legend_ncols)
 
@@ -404,8 +412,8 @@ plot_pi(
     ax=axs[2],
     include_xtitle=True,
     include_legend=True,
-    legend_ncols=3,
-    legend_loc='lower center'
+    legend_ncols=4,
+    legend_loc='lower right'
 )
 
 plt.tight_layout()
@@ -501,7 +509,6 @@ axs[0].set_xlabel('SHAP value', size=18)
 # https://github.com/shap/shap/issues/594#issuecomment-1206481300
 cbar = plt.gcf().axes[1]
 cbar.tick_params(labelsize=15)
-cbar.set_ylabel("Feature value", fontsize=18)
 
 plt.sca(axs[1])
 shap.plots.beeswarm(
@@ -521,7 +528,6 @@ axs[1].set_xlabel('SHAP value', size=18)
 # https://github.com/shap/shap/issues/594#issuecomment-1206481300
 cbar = plt.gcf().axes[1]
 cbar.tick_params(labelsize=15)
-cbar.set_ylabel("Feature value", fontsize=18)
 
 fig.suptitle('SHAP values for XGBoost\nEAGLE S case evaluation, $DIF\ $ target', size=26)
 
@@ -553,7 +559,6 @@ axs[0].set_xlabel('SHAP value', size=18)
 # https://github.com/shap/shap/issues/594#issuecomment-1206481300
 cbar = plt.gcf().axes[1]
 cbar.tick_params(labelsize=15)
-cbar.set_ylabel("Feature value", fontsize=18)
 
 plt.sca(axs[1])
 shap.plots.beeswarm(
@@ -573,7 +578,6 @@ axs[1].set_xlabel('SHAP value', size=18)
 # https://github.com/shap/shap/issues/594#issuecomment-1206481300
 cbar = plt.gcf().axes[1]
 cbar.tick_params(labelsize=15)
-cbar.set_ylabel("Feature value", fontsize=18)
 
 fig.suptitle('SHAP values for XGBoost\nVEZHEN case evaluation, $DIF\ $ target', size=26)
 

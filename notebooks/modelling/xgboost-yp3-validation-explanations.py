@@ -483,7 +483,6 @@ axs[0].set_xlabel('SHAP value', size=18)
 # https://github.com/shap/shap/issues/594#issuecomment-1206481300
 cbar = plt.gcf().axes[1]
 cbar.tick_params(labelsize=15)
-cbar.set_ylabel("Feature value", fontsize=18)
 
 plt.sca(axs[1])
 shap.plots.beeswarm(shap_high[:75], show=False, plot_size=(8, 8), max_display=11)
@@ -498,7 +497,6 @@ axs[1].set_xlabel('SHAP value', size=18)
 # https://github.com/shap/shap/issues/594#issuecomment-1206481300
 cbar = plt.gcf().axes[1]
 cbar.tick_params(labelsize=15)
-cbar.set_ylabel("Feature value", fontsize=18)
 
 fig.suptitle('SHAP values for XGBoost\nYI-PENG 3 case evaluation, $DIF\ $ target', size=26)
 

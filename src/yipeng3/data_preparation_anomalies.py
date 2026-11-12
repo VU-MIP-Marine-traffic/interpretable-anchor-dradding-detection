@@ -56,7 +56,7 @@ raw_df = raw_df[raw_df['heading'] >= 0.0]
 raw_df = raw_df[raw_df['course'] <= 360.0]
 raw_df = raw_df[raw_df['heading'] <= 360.0]
 
-# cap speed 
+# cap speed
 raw_df.loc[raw_df['speed'] > 25, 'speed'] = np.nan
 
 # We will groupby day also, so that we do not have huge gaps to interpolate
