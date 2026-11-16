@@ -1,0 +1,49 @@
+Eagles delta_cog prediction interval coverage: 0.9014925373134328
+Eagles delta_dif prediction interval coverage: 0.8865671641791045
+Eagles dif prediction interval coverage: 0.8537313432835821
+Vezhen delta_cog prediction interval coverage: 0.9826589595375722
+Vezhen delta_dif prediction interval coverage: 0.954335260115607
+Vezhen dif prediction interval coverage: 0.8300578034682081
+264/264 [==============================] - 0s 895us/step
+Lower-quantile pinball loss for first output/time step: 0.008708134749896578
+264/264 [==============================] - 0s 802us/step
+
+PICP:
+   delta_cog  delta_dif       dif  time_step
+0   0.962682   0.968843  0.972515          5
+1   0.963156   0.972989  0.971804         10
+2   0.965288   0.976306  0.975121         15
+3   0.964815   0.975358  0.974411         20
+4   0.964933   0.975951  0.973344         25
+
+PINAW:
+   delta_cog  delta_dif       dif  time_step
+0   0.562332   0.321969  0.545557          5
+1   0.567144   0.327423  0.557185         10
+2   0.578892   0.332709  0.565913         15
+3   0.580169   0.332388  0.565973         20
+4   0.580880   0.332228  0.566132         25
+
+Low-quantile pinball loss:
+   delta_cog  delta_dif       dif  time_step
+0   0.008708   0.004363  0.006741          5
+1   0.008697   0.004409  0.006786         10
+2   0.008716   0.004453  0.006819         15
+3   0.008770   0.004492  0.006833         20
+4   0.008820   0.004502  0.006843         25
+
+High-quantile pinball loss:
+   delta_cog  delta_dif       dif  time_step
+0   0.008604   0.004430  0.007580          5
+1   0.008661   0.004458  0.007872         10
+2   0.008711   0.004494  0.008024         15
+3   0.008743   0.004501  0.008074         20
+4   0.008783   0.004494  0.008132         25
+243/243 [==============================] - 0s 789us/step
+243/243 [==============================] - 0s 922us/step
+delta_cog limit: 0.8066463414634145
+delta_dif limit: 0.8753014184397162
+dif limit: 0.7130838323353295
+Test delta_cog below threshold: 0.0
+Test dif below threshold: 0.01282051282051282
+Test delta_dif below threshold: 0.01282051282051282

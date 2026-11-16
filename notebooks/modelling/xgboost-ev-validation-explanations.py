@@ -19,6 +19,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import shap
 import pytz
+import re
 
 from pathlib import Path
 from datetime import datetime, timedelta
@@ -170,7 +171,8 @@ def test_xgboost_feature(feat: int, feat_name: str, hyper: dict):
 
     df = pd.DataFrame(df)
 
-    print(feat_name, ':', np.quantile(df['delta_cog'], 0.05))
+    threshold = np.quantile(df['delta_cog'], 0.05)
+    print(feat_name, ':', threshold)
 
     eagles_y_tmp = eagles_y.reshape((-1, 5, 3))[:, :, feat]
     print(
@@ -198,7 +200,8 @@ def test_xgboost_feature(feat: int, feat_name: str, hyper: dict):
         eagles_high,
         vezhen_y_tmp,
         vezhen_low,
-        vezhen_high
+        vezhen_high,
+        threshold
     )
 
 
@@ -215,7 +218,8 @@ best_hyper = {
     eagles_high_delta_cog,
     vezhen_true_delta_cog,
     vezhen_low_delta_cog,
-    vezhen_high_delta_cog
+    vezhen_high_delta_cog,
+    threshold_delta_cog
 ) = test_xgboost_feature(
     0,
     feat_name='Delta COG',
@@ -236,7 +240,8 @@ best_hyper = {
     eagles_high_delta_dif,
     vezhen_true_delta_dif,
     vezhen_low_delta_dif,
-    vezhen_high_delta_dif
+    vezhen_high_delta_dif,
+    threshold_delta_dif
 ) = test_xgboost_feature(
     1,
     feat_name='Delta DIF',
@@ -257,7 +262,8 @@ best_hyper = {
     eagles_high_dif,
     vezhen_true_dif,
     vezhen_low_dif,
-    vezhen_high_dif
+    vezhen_high_dif,
+    threshold_dif
 ) = test_xgboost_feature(
     2,
     feat_name='DIF',
@@ -485,112 +491,54 @@ explainer_low = shap.TreeExplainer(
     feature_names=feature_names
 )
 
-shap_high = explainer_high(eagles_x)
-shap_low = explainer_low(eagles_x)
+ships = ['EAGLE S', 'VEZHEN']
+ships_input_data = [eagles_x, vezhen_x]
 
 
-fig, axs = plt.subplots(2, 1)
+fig, axs = plt.subplots(2, 3, figsize=(40, 12))
 
-plt.sca(axs[0])
-shap.plots.beeswarm(
-    shap_low,
-    show=False,
-    plot_size=(8, 8),
-    max_display=11
-)
+for ix in range(len(ships)):
+    shap_high = explainer_high(ships_input_data[ix])
+    shap_low = explainer_low(ships_input_data[ix])
 
-axs[0].set_title(
-    'Lower bound model',
-    size=20
-)
-axs[0].tick_params(axis='both', labelsize=16)
-axs[0].set_xlabel('SHAP value', size=18)
+    plt.sca(axs[ix][0])
+    shap.plots.beeswarm(
+        shap_low,
+        show=False,
+        plot_size=(18, 8),
+        max_display=11
+    )
 
-# https://github.com/shap/shap/issues/594#issuecomment-1206481300
-cbar = plt.gcf().axes[1]
-cbar.tick_params(labelsize=15)
+    axs[ix][0].set_title(
+        f'Lower bound model / {ships[ix]}',
+        size=20
+    )
+    axs[ix][0].tick_params(axis='both', labelsize=16)
+    axs[ix][0].set_xlabel('SHAP value', size=18)
 
-plt.sca(axs[1])
-shap.plots.beeswarm(
-    shap_high,
-    show=False,
-    plot_size=(8, 8),
-    max_display=11
-)
+    # https://github.com/shap/shap/issues/594#issuecomment-1206481300
+    cbar = plt.gcf().axes[1]
+    cbar.tick_params(labelsize=15)
 
-axs[1].set_title(
-    'Upper bound model',
-    size=20
-)
-axs[1].tick_params(axis='both', labelsize=16)
-axs[1].set_xlabel('SHAP value', size=18)
+    plt.sca(axs[ix][1])
+    shap.plots.beeswarm(
+        shap_high,
+        show=False,
+        plot_size=(18, 8),
+        max_display=11
+    )
 
-# https://github.com/shap/shap/issues/594#issuecomment-1206481300
-cbar = plt.gcf().axes[1]
-cbar.tick_params(labelsize=15)
+    axs[ix][1].set_title(
+        f'Upper bound model / {ships[ix]}',
+        size=20
+    )
+    axs[ix][1].tick_params(axis='both', labelsize=16)
+    axs[ix][1].set_xlabel('SHAP value', size=18)
 
-fig.suptitle('SHAP values for XGBoost\nEAGLE S case evaluation, $DIF\ $ target', size=26)
+    # https://github.com/shap/shap/issues/594#issuecomment-1206481300
+    cbar = plt.gcf().axes[1]
+    cbar.tick_params(labelsize=15)
 
-plt.tight_layout()
-plt.savefig(IMAGE_DIR / 'shap-values-eagles.pdf', format='pdf', bbox_inches='tight')
-plt.close(fig)
-
-
-shap_high = explainer_high(vezhen_x)
-shap_low = explainer_low(vezhen_x)
-
-fig, axs = plt.subplots(2, 1)
-
-plt.sca(axs[0])
-shap.plots.beeswarm(
-    shap_low,
-    show=False,
-    plot_size=(8, 8),
-    max_display=11
-)
-
-axs[0].set_title(
-    'Lower bound model',
-    size=20
-)
-axs[0].tick_params(axis='both', labelsize=16)
-axs[0].set_xlabel('SHAP value', size=18)
-
-# https://github.com/shap/shap/issues/594#issuecomment-1206481300
-cbar = plt.gcf().axes[1]
-cbar.tick_params(labelsize=15)
-
-plt.sca(axs[1])
-shap.plots.beeswarm(
-    shap_high,
-    show=False,
-    plot_size=(8, 8),
-    max_display=11
-)
-
-axs[1].set_title(
-    'Upper bound model',
-    size=20
-)
-axs[1].tick_params(axis='both', labelsize=16)
-axs[1].set_xlabel('SHAP value', size=18)
-
-# https://github.com/shap/shap/issues/594#issuecomment-1206481300
-cbar = plt.gcf().axes[1]
-cbar.tick_params(labelsize=15)
-
-fig.suptitle('SHAP values for XGBoost\nVEZHEN case evaluation, $DIF\ $ target', size=26)
-
-plt.tight_layout()
-plt.savefig(IMAGE_DIR / 'shap-values-vezhen.pdf', format='pdf', bbox_inches='tight')
-plt.close(fig)
-
-
-fig, axs = plt.subplots(nrows=2, figsize=(6, 6))
-fig.suptitle(
-    'Gain metric values of XGBoost models\nDataset EV, $DIF$ target',
-    size=20
-)
 
 df_imp = pd.DataFrame({
     'Feature': feature_names,
@@ -600,15 +548,16 @@ df_imp = pd.DataFrame({
 df_imp.set_index(keys='Feature') \
     .sort_values(by='Feature importance', ascending=True) \
     .tail(10) \
-    .plot.barh(ax=axs[0])
+    .plot.barh(ax=axs[0][2])
 
 # Source - https://stackoverflow.com/a/26845924
 # Posted by naitsirhc, modified by community. See post 'Timeline' for change history
 # Retrieved 2026-09-23, License - CC BY-SA 4.0
-axs[0].get_legend().remove()
-axs[0].tick_params(axis='both', labelsize=14)
-axs[0].set_ylabel('Feature', size=18)
-axs[0].set_title('Lower bound', size=20)
+axs[0][2].get_legend().remove()
+axs[0][2].tick_params(axis='both', labelsize=14)
+axs[0][2].set_xlabel('Gain', size=18)
+axs[0][2].set_ylabel('Feature', size=18)
+axs[0][2].set_title('Lower bound', size=20)
 
 df_imp = pd.DataFrame({
     'Feature': feature_names,
@@ -618,21 +567,50 @@ df_imp = pd.DataFrame({
 df_imp.set_index(keys='Feature') \
     .sort_values(by='Feature importance', ascending=True) \
     .tail(10) \
-    .plot.barh(ax=axs[1])
+    .plot.barh(ax=axs[1][2])
 
 # Source - https://stackoverflow.com/a/26845924
 # Posted by naitsirhc, modified by community. See post 'Timeline' for change history
 # Retrieved 2026-09-23, License - CC BY-SA 4.0
-axs[1].get_legend().remove()
-axs[1].tick_params(axis='both', labelsize=14)
-axs[1].set_ylabel('Feature', size=18)
-axs[1].set_xlabel('Gain', size=18)
-axs[1].set_title('Upper bound', size=20)
+axs[1][2].get_legend().remove()
+axs[1][2].tick_params(axis='both', labelsize=14)
+axs[1][2].set_ylabel('Feature', size=18)
+axs[1][2].set_xlabel('Gain', size=18)
+axs[1][2].set_title('Upper bound', size=20)
 
-plt.tight_layout()
-plt.savefig(IMAGE_DIR / 'mdi-scores-xgboost-ev.pdf', format='pdf', bbox_inches='tight')
-plt.close(fig)
+plt.tight_layout()                      # lock in columns 1-2 first
+fig.canvas.draw()
+rend = fig.canvas.get_renderer()
 
+gap_in = 1                           # desired gap (inches) between column 2 and column 3
+
+# right-most extent of column 2, including its colorbar and the colorbar label
+col2_left = axs[0][1].get_position().x0
+col2_parts = [axs[0][1], axs[1][1]] + [a for a in fig.axes
+              if a not in axs.flat and a.get_position().x0 > col2_left]
+col2_right = max(a.get_tightbbox(rend).x1 for a in col2_parts)
+
+# left-most extent of column 3, including tick labels and the "Feature" label
+col3_left = min(ax.get_tightbbox(rend).x0 for ax in axs[:, 2])
+
+extra = (gap_in * fig.dpi - (col3_left - col2_right)) / fig.bbox.width
+for ax in axs[:, 2]:                    # only column 3 moves
+    p = ax.get_position()
+    ax.set_position([p.x0 + extra, p.y0, p.width, p.height])
+
+# centered (a)/(b) labels from the real positions
+a0, a1, b = axs[1][0].get_position(), axs[1][1].get_position(), axs[1][2].get_position()
+fig.text((a0.x0 + a1.x1) / 2, -.01, '$(a)$', fontdict={'size': 20}, ha='center')
+fig.text((b.x0 + b.x1) / 2,    -.01, '$(b)$', fontdict={'size': 20}, ha='center')
+
+plt.savefig(
+    IMAGE_DIR / 'interpretation-ev.tif',
+    bbox_inches='tight',
+    format="tiff",
+    dpi=1000,
+    pil_kwargs={"compression": "tiff_lzw"}
+)
+plt.close()
 
 test_mmsis = np.load(
     '../../output/data_eagles_vezhen/qrf/test-mmsis2.npy',
@@ -642,7 +620,6 @@ test_days = np.load(
     '../../output/data_eagles_vezhen/qrf/test-days2.npy',
     allow_pickle=True
 )
-
 
 def calc_false_positve(var_num: int, thresh: float):
     model_low = xgb.XGBRegressor(
@@ -693,11 +670,10 @@ def calc_false_positve(var_num: int, thresh: float):
 
 
 # taken from the top
-# TODO: save it at the top and re-use it here
 thresholds = [
-    0.8867307692307692,
-    0.8856525423728814,
-    0.8775641025641026
+    threshold_delta_cog,
+    threshold_delta_dif,
+    threshold_dif
 ]
 
 feats=['Delta COG', 'Delta DIF', 'DIF']

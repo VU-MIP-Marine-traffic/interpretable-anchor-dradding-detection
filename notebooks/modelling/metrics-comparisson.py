@@ -217,7 +217,8 @@ sns.barplot(
     hue='Architecture',
     errorbar=('ci', 95),
     ax=axs[0],
-    palette=sns.color_palette(colors)
+    palette=sns.color_palette(colors),
+    alpha=0.8
 )
 
 num_locations = 2
@@ -286,7 +287,8 @@ sns.barplot(
     hue='Architecture',
     errorbar=('ci', 95),
     ax=axs[1],
-    palette=sns.color_palette(colors)
+    palette=sns.color_palette(colors),
+    alpha=0.8
 )
 
 num_locations = 2
