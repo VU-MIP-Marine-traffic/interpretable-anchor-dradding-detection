@@ -1,4 +1,5 @@
-*.tif
+*.html
+*.tif*
 *.pdf
 *.sif
 *.def
