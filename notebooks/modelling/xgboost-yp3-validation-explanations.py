@@ -373,7 +373,13 @@ plt.scatter(
 plt.legend(fontsize=20)
 
 plt.tight_layout()
-plt.savefig(IMAGE_DIR / 'dif-xgboost-yipeng3.pdf', format='pdf', bbox_inches='tight')
+plt.savefig(
+    IMAGE_DIR / 'dif-xgboost-yipeng3.tif', 
+    bbox_inches='tight',
+    format="tiff",
+    dpi=1000,
+    pil_kwargs={"compression": "tiff_lzw"}
+)
 plt.close(fig)
 
 print(
@@ -424,34 +430,33 @@ def top_mdi(model, n=10):
     )
 
 
-fig, axs = plt.subplots(nrows=2, figsize=(6, 6))
-fig.suptitle('Gain metric values of XGBoost models\nDataset YP3, $DIF$ target', size=20)
+fig, axs = plt.subplots(nrows=2, ncols=2, figsize=(15, 6))
 
 shap_top_attrib_low = top_mdi(model_low)
-shap_top_attrib_low.plot.barh(ax=axs[0])
+shap_top_attrib_low.plot.barh(ax=axs[0][0])
 
 # Source - https://stackoverflow.com/a/26845924
 # Posted by naitsirhc, modified by community. See post 'Timeline' for change history
 # Retrieved 2026-09-23, License - CC BY-SA 4.0
-axs[0].get_legend().remove()
-axs[0].tick_params(axis='both', labelsize=14)
-axs[0].set_ylabel('Feature', size=18)
-axs[0].set_title('Lower bound', size=20)
+axs[0][0].get_legend().remove()
+axs[0][0].tick_params(axis='both', labelsize=14)
+axs[0][0].set_ylabel('Feature', size=18)
+axs[0][0].set_title('Lower bound', size=20)
 
-top_mdi(model_high).plot.barh(ax=axs[1])
+top_mdi(model_high).plot.barh(ax=axs[1][0])
 
 # Source - https://stackoverflow.com/a/26845924
 # Posted by naitsirhc, modified by community. See post 'Timeline' for change history
 # Retrieved 2026-09-23, License - CC BY-SA 4.0
-axs[1].get_legend().remove()
-axs[1].tick_params(axis='both', labelsize=14)
-axs[1].set_ylabel('Feature', size=18)
-axs[1].set_xlabel('Gain', size=18)
-axs[1].set_title('Upper bound', size=20)
+axs[1][0].get_legend().remove()
+axs[1][0].tick_params(axis='both', labelsize=14)
+axs[1][0].set_ylabel('Feature', size=18)
+axs[1][0].set_xlabel('Gain', size=18)
+axs[1][0].set_title('Upper bound', size=20)
 
-plt.tight_layout()
-plt.savefig(IMAGE_DIR / 'mdi-scores-xgboost-yp3.pdf', format='pdf', bbox_inches='tight')
-plt.close(fig)
+# plt.tight_layout()
+# plt.savefig(IMAGE_DIR / 'mdi-scores-xgboost-yp3.pdf', format='pdf', bbox_inches='tight')
+# plt.close(fig)
 
 print('Gain metric values, lower bound (top 10):')
 print(top_mdi(model_low))
@@ -462,8 +467,7 @@ print(top_mdi(model_high))
 print('Gain metris values ratio (upper bound):', 0.178426 / 0.032979)
 
 
-fig, axs = plt.subplots(2, 1)
-plt.sca(axs[0])
+plt.sca(axs[0][1])
 
 shap_low_values = np.array(shap_low.values)
 shap_low_base=  shap_low.base_values[0]
@@ -471,37 +475,35 @@ shap_low_base=  shap_low.base_values[0]
 print( 'SHAP base value',  shap_low_base )
 print( 'SHAP SOG min:', shap_low_values[:, 0].min() )
 
-shap.plots.beeswarm(shap_low[:75], show=False, plot_size=(8, 8), max_display=11)
+shap.plots.beeswarm(shap_low[:75], show=False, plot_size=(12, 8), max_display=11)
 
-axs[0].set_title(
+axs[0][1].set_title(
     'Lower bound model',
     size=20
 )
-axs[0].tick_params(axis='both', labelsize=16)
-axs[0].set_xlabel('SHAP value', size=18)
+axs[0][1].tick_params(axis='both', labelsize=16)
+axs[0][1].set_xlabel('SHAP value', size=18)
 
 # https://github.com/shap/shap/issues/594#issuecomment-1206481300
 cbar = plt.gcf().axes[1]
 cbar.tick_params(labelsize=15)
 
-plt.sca(axs[1])
-shap.plots.beeswarm(shap_high[:75], show=False, plot_size=(8, 8), max_display=11)
+plt.sca(axs[1][1])
+shap.plots.beeswarm(shap_high[:75], show=False, plot_size=(12, 8), max_display=11)
 
-axs[1].set_title(
+axs[1][1].set_title(
     'Upper bound model',
     size=20
 )
-axs[1].tick_params(axis='both', labelsize=16)
-axs[1].set_xlabel('SHAP value', size=18)
+axs[1][1].tick_params(axis='both', labelsize=16)
+axs[1][1].set_xlabel('SHAP value', size=18)
 
 # https://github.com/shap/shap/issues/594#issuecomment-1206481300
 cbar = plt.gcf().axes[1]
 cbar.tick_params(labelsize=15)
 
-fig.suptitle('SHAP values for XGBoost\nYI-PENG 3 case evaluation, $DIF\ $ target', size=26)
-
 plt.tight_layout()
-plt.savefig(IMAGE_DIR / 'shap-values-yipeng3.pdf', format='pdf', bbox_inches='tight')
+plt.savefig(IMAGE_DIR / 'shap-values-yipeng3.tif', format='tiff', dpi=1000, bbox_inches='tight', pil_kwargs={"compression": "tiff_lzw"})
 plt.close(fig)
 
 

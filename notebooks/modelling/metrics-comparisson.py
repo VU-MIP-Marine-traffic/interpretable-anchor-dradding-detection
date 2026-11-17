@@ -82,264 +82,191 @@ df['Architecture'] = df['Architecture'].apply(
     lambda arch: rename_arch[arch]
 )
 
+from itertools import cycle
+import matplotlib.patches as mpatches
+import matplotlib.pyplot as plt
+import seaborn as sns
 
-fig, (ax1, ax2) = plt.subplots(nrows=2, sharex=True)
+fig, axs = plt.subplots(nrows=2, ncols=3, figsize=(16, 7))
+# Note: With axs = axs.T, indexing is axs[column][row]
+axs = axs.T
 
+# --- COLUMN 0: PICP (Row 0 = EV, Row 1 = YP3) ---
 sns.lineplot(
-    data=df[
-        (df['Dataset'] == 'ev') &
-        (df['Metric'] == 'picp')
-    ],
+    data=df[(df['Dataset'] == 'ev') & (df['Metric'] == 'picp')],
     x='time_step',
     y='dif',
     hue='Architecture',
     markers='o',
     errorbar=('pi', 95),
     style='Architecture',
-    ax=ax1
+    ax=axs[0][0],
 )
+axs[0][0].set_title('Dataset EV', size=20)
+axs[0][0].set_ylabel(r'$DIF\ $ PICP', size=18)
+axs[0][0].set_xticklabels(labels=['']*5)
+axs[0][0].set_xlabel('')
+axs[0][0].tick_params(axis='both', labelsize=18)
+axs[0][0].set_yticks(ticks=[0.9, 0.925, 0.95, 0.975, 1.0], labels=[0.9, 0.925, 0.95, 0.975, 1.0])
+axs[0][0].legend().remove()
+axs[0][0].set_ylim((0.9, 1.0))
 
 sns.lineplot(
-    data=df[
-        (df['Dataset'] == 'ev') &
-        (df['Metric'] == 'pinaw')
-    ],
-    x='time_step',
-    y='dif',
-    hue='Architecture',
-    style='Architecture',
-    markers='o',
-    errorbar=('pi', 95),
-    ax=ax2
-)
-
-ax1.set_ylabel(r'$DIF\ $ PICP', size=22)
-ax1.tick_params(axis='y', labelsize=18)
-ax1.legend(loc='lower right', framealpha=0.7, ncols=3, fontsize=13)
-ax1.set_yticks(
-    ticks=[0.9, 0.95, 1.0],
-    labels=[0.9, 0.95, 1.0]
-)
-ax1.set_ylim((0.9, 1.0))
-
-ax2.set_xlabel('Time step', size=22)
-ax2.tick_params(axis='both', labelsize=18)
-ax2.set_ylabel(r'$DIF\ $ PINAW', size=16)
-ax2.legend(loc='lower right', framealpha=0.7, ncols=3, fontsize=13)
-ax2.set_xticks(
-    ticks=range(5, 30, 5),
-    labels=range(5, 30, 5)
-)
-ax2.set_ylim((0.0, 0.65))
-
-ax1.set_title('PI metrics in EV dataset', size=26)
-
-fig.tight_layout()
-fig.savefig('../images/dataset-ev-metrics.pdf', format='pdf', bbox_inches='tight')
-
-
-fig, (ax1, ax2) = plt.subplots(nrows=2, sharex=True)
-
-sns.lineplot(
-    data=df[
-        (df['Dataset'] == 'yp3') &
-        (df['Metric'] == 'picp')
-    ],
+    data=df[(df['Dataset'] == 'yp3') & (df['Metric'] == 'picp')],
     x='time_step',
     y='dif',
     hue='Architecture',
     markers='o',
     errorbar=('pi', 95),
     style='Architecture',
-    ax=ax1
+    ax=axs[0][1],
 )
+axs[0][1].set_title('Dataset YP3', size=20)
+axs[0][1].set_ylabel(r'$DIF\ $ PICP', size=18)
+axs[0][1].tick_params(axis='both', labelsize=18)
+axs[0][1].set_xlabel('Time step', size=20)
+axs[0][1].set_xticks(ticks=range(5, 30, 5), labels=range(5, 30, 5))
+axs[0][0].set_yticks(ticks=[0.9, 0.925, 0.95, 0.975, 1.0], labels=[0.9, 0.925, 0.95, 0.975, 1.0])
+axs[0][1].legend(loc='lower right', framealpha=0.7, ncols=3, fontsize=12)
+axs[0][1].set_ylim((0.9, 1.0))
 
+
+# --- COLUMN 1: PINAW (Row 0 = EV, Row 1 = YP3) ---
 sns.lineplot(
-    data=df[
-        (df['Dataset'] == 'yp3') &
-        (df['Metric'] == 'pinaw')
-    ],
+    data=df[(df['Dataset'] == 'ev') & (df['Metric'] == 'pinaw')],
     x='time_step',
     y='dif',
     hue='Architecture',
     style='Architecture',
     markers='o',
     errorbar=('pi', 95),
-    ax=ax2
+    ax=axs[1][0],
 )
+axs[1][0].set_title('Dataset EV', size=20)
+axs[1][0].set_ylabel(r'$DIF\ $ PINAW', size=18)
+axs[0][0].set_xticklabels(labels=['']*5)
+axs[1][0].set_xlabel('')
+axs[1][0].tick_params(axis='both', labelsize=18)
+axs[1][0].set_ylim((0.0, 0.65))
+axs[1][0].legend().remove()
 
-ax1.set_ylabel(r'$DIF\ $ PICP', size=22)
-ax1.tick_params(axis='y', labelsize=18)
-ax1.legend(loc='lower right', framealpha=0.7, fontsize=13, ncols=3)
-ax1.set_yticks(
-    ticks=[0.9, 0.95, 1.0],
-    labels=[0.9, 0.95, 1.0]
+sns.lineplot(
+    data=df[(df['Dataset'] == 'yp3') & (df['Metric'] == 'pinaw')],
+    x='time_step',
+    y='dif',
+    hue='Architecture',
+    style='Architecture',
+    markers='o',
+    errorbar=('pi', 95),
+    ax=axs[1][1],
 )
-ax1.set_ylim((0.9, 1.0))
-
-ax2.set_xlabel('Time step', size=22)
-ax2.tick_params(axis='both', labelsize=18)
-ax2.set_ylabel(r'$DIF\ $ PINAW', size=22)
-ax2.legend(loc='lower right', framealpha=0.7, fontsize=13, ncols=3)
-ax2.set_xticks(
-    ticks=range(5, 30, 5),
-    labels=range(5, 30, 5)
-)
-ax2.set_ylim((0.0, 0.55))
-
-ax1.set_title('PI metrics in YP3 dataset', size=26)
-
-fig.tight_layout()
-fig.savefig('../images/dataset-yp3-metrics.pdf', format='pdf', bbox_inches='tight')
+axs[1][1].set_title('Dataset YP3', size=20)
+axs[1][1].set_xlabel('Time step', size=20)
+axs[1][1].set_ylabel(r'$DIF\ $ PINAW', size=18)
+axs[1][1].tick_params(axis='both', labelsize=18)
+axs[1][1].set_xticks(ticks=range(5, 30, 5), labels=range(5, 30, 5))
+axs[1][1].set_ylim((0.0, 0.55))
+axs[1][1].legend(loc='lower right', framealpha=0.7, ncols=3, fontsize=12)
 
 
-# Parts of code from https://github.com/mwaskom/seaborn/issues/1456#issuecomment-399002203:
-
-fig, axs = plt.subplots(
-    nrows=2,
-    figsize=(6, 6),
-    sharex=True
-)
-
+# --- COLUMN 2: BARPLOTS (Row 0 = EV, Row 1 = YP3) ---
 fig.suptitle('Loss of lower and upper bound models', size=26)
 
 hatches = ['//', '..', '++']
-hatches_cycle = cycle(hatches)
 colors = ['#007191', '#f47a00', '#d31f11']
+legend_patches = [
+    mpatches.Patch(facecolor=colors[0], edgecolor='white', hatch=hatches[0], alpha=0.99, label='LSTM-AE'),
+    mpatches.Patch(facecolor=colors[1], edgecolor='white', hatch=hatches[1], alpha=0.99, label='QRF'),
+    mpatches.Patch(facecolor=colors[2], edgecolor='white', hatch=hatches[2], alpha=0.99, label='XGBoost'),
+]
 
+# Row 0, Col 2: Dataset EV
 sns.barplot(
-    data=df[
-        (df['Dataset'] == 'yp3') &
-        ((df['Metric'] == 'loss_low') | (df['Metric'] == 'loss_high'))
-    ],
+    data=df[(df['Dataset'] == 'ev') & (df['Metric'].isin(['loss_low', 'loss_high']))],
     x='Metric',
     y='dif',
     hue='Architecture',
     errorbar=('ci', 95),
-    ax=axs[0],
+    ax=axs[2][0],
     palette=sns.color_palette(colors),
-    alpha=0.8
+    alpha=0.8,
 )
-
-num_locations = 2
-
-for i, patch in enumerate(axs[0].patches):
-    if i % num_locations == 0:
+hatches_cycle = cycle(hatches)
+for i, patch in enumerate(axs[2][0].patches):
+    if i % 2 == 0:
         hatch = next(hatches_cycle)
     patch.set_hatch(hatch)
 
+axs[2][0].legend().remove()
+axs[2][0].set_xticklabels(['Loss lower bound', 'Loss upper bound'], size=16)
+axs[2][0].set_ylabel('Metric value', size=18)
+axs[2][0].tick_params(axis='both', labelsize=14)
+axs[2][0].set_xlabel('')
+axs[2][0].set_title('Dataset EV', size=20)
 
-# Source - https://stackoverflow.com/a/44937210
-# Posted by Andras Deak -- Слава Україні
-# Retrieved 2026-09-25, License - CC BY-SA 3.0
-
-import matplotlib.patches as mpatches
-
-
-circ1 = mpatches.Patch(
-    facecolor=colors[0],
-    edgecolor='white',
-    hatch=hatches[0],
-    alpha=0.99,
-    label='LSTM-AE'
-)
-
-circ2 = mpatches.Patch(
-    facecolor=colors[1],
-    edgecolor='white',
-    hatch=hatches[1],
-    alpha=0.99,
-    label='QRF'
-)
-
-circ3 = mpatches.Patch(
-    facecolor=colors[2],
-    edgecolor='white',
-    hatch=hatches[2],
-    alpha=0.99,
-    label='XGBoost'
-)
-
-axs[0].legend(handles=[circ1, circ2, circ3], fontsize=14, loc='lower left')
-plt.tight_layout()
-
-axs[0].set_xticklabels(
-    ['Loss lower bound', 'Loss upper bound'],
-    size=16
-)
-axs[0].set_ylabel('$DIF$', size=18)
-axs[0].tick_params(axis='both', labelsize=14)
-axs[0].set_xlabel('')
-axs[0].set_title('Dataset EV', size=15)
-
-
-hatches = ['//', '..', '++']
-hatches_cycle = cycle(hatches)
-colors = ['#007191', '#f47a00', '#d31f11']
-
+# Row 1, Col 2: Dataset YP3
 sns.barplot(
-    data=df[
-        (df['Dataset'] == 'ev') &
-        ((df['Metric'] == 'loss_low') | (df['Metric'] == 'loss_high'))
-    ],
+    data=df[(df['Dataset'] == 'yp3') & (df['Metric'].isin(['loss_low', 'loss_high']))],
     x='Metric',
     y='dif',
     hue='Architecture',
     errorbar=('ci', 95),
-    ax=axs[1],
+    ax=axs[2][1],
     palette=sns.color_palette(colors),
-    alpha=0.8
+    alpha=0.8,
 )
-
-num_locations = 2
-
-for i, patch in enumerate(axs[1].patches):
-    if i % num_locations == 0:
+hatches_cycle = cycle(hatches)
+for i, patch in enumerate(axs[2][1].patches):
+    if i % 2 == 0:
         hatch = next(hatches_cycle)
     patch.set_hatch(hatch)
 
-
-# Source - https://stackoverflow.com/a/44937210
-# Posted by Andras Deak -- Слава Україні
-# Retrieved 2026-09-25, License - CC BY-SA 3.0
-#
-# also: https://claude.ai/share/b170e2b2-bfda-46e4-bdfd-a45b5eb4242f
-
-circ1 = mpatches.Patch(
-    facecolor=colors[0],
-    edgecolor='white',
-    hatch=hatches[0],
-    alpha=0.99,
-    label='LSTM-AE'
-)
-
-circ2 = mpatches.Patch(
-    facecolor=colors[1],
-    edgecolor='white',
-    hatch=hatches[1],
-    alpha=0.99,
-    label='QRF'
-)
-
-circ3 = mpatches.Patch(
-    facecolor=colors[2],
-    edgecolor='white',
-    hatch=hatches[2],
-    alpha=0.99,
-    label='XGBoost'
-)
-
-axs[1].legend(handles=[circ1, circ2, circ3], fontsize=14, loc='lower left')
-
-axs[1].set_xticklabels(
-    ['Loss lower bound', 'Loss upper bound'],
-    size=16
-)
-axs[0].set_ylabel('Metric value', size=18)
-axs[1].set_ylabel('Metric value', size=18)
-axs[1].tick_params(axis='both', labelsize=14)
-axs[1].set_xlabel('Metric', size=16)
-axs[1].set_title('Dataset YP3', size=15)
+axs[2][1].legend(handles=legend_patches, fontsize=14, loc='lower left')
+axs[2][1].set_xticklabels(['Loss lower bound', 'Loss upper bound'], size=16)
+axs[2][1].set_ylabel('Metric value', size=18)
+axs[2][1].tick_params(axis='both', labelsize=14)
+axs[2][1].set_xlabel('Metric', size=16)
+axs[2][1].set_title('Dataset YP3', size=20)
 
 fig.tight_layout()
-fig.savefig('../images/loss-ev-yp3.pdf', format='pdf', bbox_inches='tight')
+fig.canvas.draw()
+rend = fig.canvas.get_renderer()
+
+gap_in = 1.0  # desired gap (inches) between column 2 and column 3
+
+# Right-most extent of column 2 (in pixels)
+col2_right = max(ax.get_tightbbox(rend).x1 for ax in axs[1, :])
+
+# Left-most extent of column 3 (in pixels)
+col3_left = min(ax.get_tightbbox(rend).x0 for ax in axs[2, :])
+
+# Shift column 3 to the right
+extra = (gap_in * fig.dpi - (col3_left - col2_right)) / fig.bbox.width
+for ax in axs[2, :]:
+    p = ax.get_position()
+    ax.set_position([p.x0 + extra, p.y0, p.width, p.height])
+
+# Redraw so tightbboxes reflect the new positions
+fig.canvas.draw()
+
+# Center (a) under columns 0–1, and (b) under column 2
+col0_left = min(ax.get_tightbbox(rend).x0 for ax in axs[0, :]) / fig.bbox.width
+col1_right = max(ax.get_tightbbox(rend).x1 for ax in axs[1, :]) / fig.bbox.width
+col2_left_fig = min(ax.get_tightbbox(rend).x0 for ax in axs[2, :]) / fig.bbox.width
+col2_right_fig = max(ax.get_tightbbox(rend).x1 for ax in axs[2, :]) / fig.bbox.width
+
+bottom_y = min(ax.get_tightbbox(rend).y0 for ax in axs.flat) / fig.bbox.height - 0.04
+
+fig.text((col0_left + col1_right) / 2, bottom_y, '$(a)$', size=20, ha='center', va='top')
+fig.text((col2_left_fig + col2_right_fig) / 2, bottom_y, '$(b)$', size=20, ha='center', va='top')
+
+# Do NOT call fig.tight_layout() again here
+fig.savefig(
+    '../images/metrics-plot.tif',
+    format='tiff',
+    dpi=1000,
+    bbox_inches='tight',
+    pil_kwargs={'compression': 'tiff_lzw'},
+)
+
+fig.savefig('../images/metrics-plot.tif', format='tiff', dpi=1000, bbox_inches='tight', pil_kwargs={'compression': 'tiff_lzw'})

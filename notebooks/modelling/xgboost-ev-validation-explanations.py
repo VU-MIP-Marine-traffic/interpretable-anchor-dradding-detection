@@ -270,7 +270,6 @@ best_hyper = {
     hyper=best_hyper
 )
 
-
 timestamps_eagles = pd.date_range(
     start=datetime(2024, 12, 25, 10, 20),
     end=datetime(2024, 12, 25, 16, 40),
@@ -286,7 +285,6 @@ def plot_pi(
     plot_ticks: list,
     plot_labels: list,
     ax: plt.Axes,
-    include_xtitle: bool = False,
     include_legend: bool = False,
     legend_loc: str = None,
     legend_ncols: int = 1
@@ -332,8 +330,7 @@ def plot_pi(
     ax.set_xticks(ticks=plot_ticks, labels=plot_labels)
     ax.tick_params(axis='both', which='both', labelsize=13)
 
-    if include_xtitle:
-        ax.set_xlabel('Timestamp (UTC)', size=18)
+    ax.set_xlabel('Timestamp (UTC)', size=18)
 
     ax.set_ylabel(rf'{feat_name}', size=18)
     ax.set_title(rf'{ship_name} {feat_name} PI', size=20)
@@ -357,7 +354,7 @@ def plot_pi(
     if not include_legend:
         ax.legend().remove()
     elif legend_loc:
-        ax.legend(fontsize=13, framealpha=0.5, loc='upper center', ncols=legend_ncols, bbox_to_anchor=(0.5, -0.4))
+        ax.legend(fontsize=13, framealpha=0.5, loc='upper center', ncols=legend_ncols, bbox_to_anchor=(-0.95, -0.3))
     else:
         ax.legend(fontsize=13, framealpha=0.5, loc='upper right', ncols=legend_ncols)
 
@@ -366,16 +363,18 @@ plt.style.use('bmh')
 plt.rcParams['axes.facecolor'] = 'white'
 
 fig, axs = plt.subplots(
-    nrows=3,
-    figsize=(8, 8),
-    gridspec_kw={'hspace': 0.25},
+    ncols=3,
+    figsize=(16, 3),
+    gridspec_kw={'wspace': 0.35},
     sharex=True
 )
 
 ticks = [
-    datetime(2024, 12, 25, 12, 0) + timedelta(hours=1) * i
-    for i in range(0, 6, 2)
+    datetime(2024, 12, 25, 10, 30) + timedelta(hours=i)
+    for i in range(0, 12, 3)
 ]
+
+print(ticks)
 
 labels = [
     tick.strftime('%Y-%m-%d\n%H:%M')
@@ -416,15 +415,21 @@ plot_pi(
     ticks,
     labels,
     ax=axs[2],
-    include_xtitle=True,
     include_legend=True,
     legend_ncols=4,
     legend_loc='lower right'
 )
 
 plt.tight_layout()
-plt.savefig(IMAGE_DIR / 'eagles-results.pdf', format='pdf', bbox_inches='tight')
+plt.savefig(
+    IMAGE_DIR / 'eagles-results.tif',
+    bbox_inches='tight',
+    format="tiff",
+    dpi=1000,
+    pil_kwargs={"compression": "tiff_lzw"}
+)
 plt.close(fig)
+exit()
 
 
 hyper = {
@@ -494,8 +499,7 @@ explainer_low = shap.TreeExplainer(
 ships = ['EAGLE S', 'VEZHEN']
 ships_input_data = [eagles_x, vezhen_x]
 
-
-fig, axs = plt.subplots(2, 3, figsize=(40, 12))
+fig, axs = plt.subplots(2, 3, figsize=(18,10))
 
 for ix in range(len(ships)):
     shap_high = explainer_high(ships_input_data[ix])
@@ -505,7 +509,7 @@ for ix in range(len(ships)):
     shap.plots.beeswarm(
         shap_low,
         show=False,
-        plot_size=(18, 8),
+        plot_size=(18, 10),
         max_display=11
     )
 
@@ -513,18 +517,29 @@ for ix in range(len(ships)):
         f'Lower bound model / {ships[ix]}',
         size=20
     )
-    axs[ix][0].tick_params(axis='both', labelsize=16)
+    axs[ix][0].tick_params(axis='both', labelsize=18)
     axs[ix][0].set_xlabel('SHAP value', size=18)
 
+    locs = axs[ix][0].get_yticks()
+    labels = [label.get_text() for label in axs[ix][0].get_yticklabels()]
+    for i, text in enumerate(labels):
+        if "sum" in text.lower():
+            labels[i] = "Sum of rest"
+    axs[ix][0].set_yticklabels(labels)
+
+    cbar = fig.axes[-1]
+    cbar.tick_params(labelsize=16)
+    cbar.set_ylabel('', size=1)
+
     # https://github.com/shap/shap/issues/594#issuecomment-1206481300
-    cbar = plt.gcf().axes[1]
-    cbar.tick_params(labelsize=15)
+    # cbar = plt.gcf().axes[1]
+    # cbar.tick_params(labelsize=15)
 
     plt.sca(axs[ix][1])
     shap.plots.beeswarm(
         shap_high,
         show=False,
-        plot_size=(18, 8),
+        plot_size=(18, 10),
         max_display=11
     )
 
@@ -532,12 +547,20 @@ for ix in range(len(ships)):
         f'Upper bound model / {ships[ix]}',
         size=20
     )
-    axs[ix][1].tick_params(axis='both', labelsize=16)
+    axs[ix][1].tick_params(axis='both', labelsize=18)
     axs[ix][1].set_xlabel('SHAP value', size=18)
 
-    # https://github.com/shap/shap/issues/594#issuecomment-1206481300
-    cbar = plt.gcf().axes[1]
-    cbar.tick_params(labelsize=15)
+    locs = axs[ix][1].get_yticks()
+    labels = [label.get_text() for label in axs[ix][1].get_yticklabels()]
+    for i, text in enumerate(labels):
+        if "sum" in text.lower():
+            print(text)
+            labels[i] = "Sum of rest"
+    axs[ix][1].set_yticklabels(labels)
+
+    cbar = fig.axes[-1]
+    cbar.tick_params(labelsize=16)
+    cbar.set_ylabel('', size=1)
 
 
 df_imp = pd.DataFrame({
@@ -554,9 +577,9 @@ df_imp.set_index(keys='Feature') \
 # Posted by naitsirhc, modified by community. See post 'Timeline' for change history
 # Retrieved 2026-09-23, License - CC BY-SA 4.0
 axs[0][2].get_legend().remove()
-axs[0][2].tick_params(axis='both', labelsize=14)
+axs[0][2].tick_params(axis='both', labelsize=18)
 axs[0][2].set_xlabel('Gain', size=18)
-axs[0][2].set_ylabel('Feature', size=18)
+axs[0][2].set_ylabel('', size=1)
 axs[0][2].set_title('Lower bound', size=20)
 
 df_imp = pd.DataFrame({
@@ -573,36 +596,18 @@ df_imp.set_index(keys='Feature') \
 # Posted by naitsirhc, modified by community. See post 'Timeline' for change history
 # Retrieved 2026-09-23, License - CC BY-SA 4.0
 axs[1][2].get_legend().remove()
-axs[1][2].tick_params(axis='both', labelsize=14)
-axs[1][2].set_ylabel('Feature', size=18)
+axs[1][2].tick_params(axis='both', labelsize=18)
 axs[1][2].set_xlabel('Gain', size=18)
+axs[1][2].set_ylabel('', size=1)
 axs[1][2].set_title('Upper bound', size=20)
-
-plt.tight_layout()                      # lock in columns 1-2 first
-fig.canvas.draw()
-rend = fig.canvas.get_renderer()
-
-gap_in = 1                           # desired gap (inches) between column 2 and column 3
-
-# right-most extent of column 2, including its colorbar and the colorbar label
-col2_left = axs[0][1].get_position().x0
-col2_parts = [axs[0][1], axs[1][1]] + [a for a in fig.axes
-              if a not in axs.flat and a.get_position().x0 > col2_left]
-col2_right = max(a.get_tightbbox(rend).x1 for a in col2_parts)
-
-# left-most extent of column 3, including tick labels and the "Feature" label
-col3_left = min(ax.get_tightbbox(rend).x0 for ax in axs[:, 2])
-
-extra = (gap_in * fig.dpi - (col3_left - col2_right)) / fig.bbox.width
-for ax in axs[:, 2]:                    # only column 3 moves
-    p = ax.get_position()
-    ax.set_position([p.x0 + extra, p.y0, p.width, p.height])
 
 # centered (a)/(b) labels from the real positions
 a0, a1, b = axs[1][0].get_position(), axs[1][1].get_position(), axs[1][2].get_position()
-fig.text((a0.x0 + a1.x1) / 2, -.01, '$(a)$', fontdict={'size': 20}, ha='center')
-fig.text((b.x0 + b.x1) / 2,    -.01, '$(b)$', fontdict={'size': 20}, ha='center')
+fig.text((a0.x0 + a1.x1) / 2, -.01, '$(a)$', fontdict={'size': 26}, ha='center')
+fig.text((b.x0 + b.x1) / 2,    -.01, '$(b)$', fontdict={'size': 26}, ha='center')
 
+
+plt.tight_layout()
 plt.savefig(
     IMAGE_DIR / 'interpretation-ev.tif',
     bbox_inches='tight',
